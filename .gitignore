@@ -1,2 +1,5 @@
 G2O_Server.x64
 crashpad_handler
+cache
+.sentry-native
+server.log
