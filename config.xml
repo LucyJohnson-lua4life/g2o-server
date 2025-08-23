@@ -6,8 +6,8 @@
 	<world name="NEWWORLD\NEWWORLD.ZEN" />
 	<description>
         <![CDATA[<center><b><font size=5 color=LemonChiffon>Gothic 2 Online</font></b><br><font color=White size=4>Community Server</font>]]>
-    </description>
-
+        </description>
+        <wayfile map="NEWWORLD" src="waypoints/newworld.xml" />
 	<!-- Default -->
 
 	<data src="data.xml" />
