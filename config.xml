@@ -1,7 +1,7 @@
 <server>
 	<debug>true</debug>
 	<config public=false host_name="Gothic Online" max_slots=32 port=28970 />
-	<master url="https://api.gothic-online.com" />
+	<master url="https://api.gothic-online.com"/> 
 	<version build=0 />
 	<world name="NEWWORLD\NEWWORLD.ZEN" />
 	<description>

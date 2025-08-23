@@ -21,18 +21,26 @@ function ClassFighter(pid) {
     setPlayerVisual(pid, "Hum_Body_Naked0", 2, "Hum_Head_Fighter", 120)
     setPlayerMaxHealth(pid, 2800)
     setPlayerHealth(pid, 2800)
-    setPlayerStrength(pid, 120)
-    setPlayerDexterity(pid, 70)
-    setPlayerSkillWeapon(pid, 0, 50)
+    setPlayerMana(pid, 1000)
+    setPlayerMaxMana(pid, 1000)
+    setPlayerStrength(pid, 200)
+    setPlayerDexterity(pid, 100)
+    setPlayerSkillWeapon(pid, 0, 100)
+    setPlayerTalent(pid, TALENT_MAGE, 6)
+    setPlayerTalent(pid, TALENT_REGENERATE, 10)
+
+
 
     giveItem(pid, "ITPO_HEALTH_ADDON_04", 10)
     giveItem(pid, "ITPO_SPEED", 10)
 
     giveItem(pid, "ITAR_SLD_H", 1)
     giveItem(pid, "ITMW_SCHWERT5", 1)
+    giveItem(pid, "ITRU_INSTANTFIREBALL", 1)
 
     equipItem(pid, "ITAR_SLD_H")
     equipItem(pid, "ITMW_SCHWERT5")
+
 }
 
 function ClassArcher(pid) {

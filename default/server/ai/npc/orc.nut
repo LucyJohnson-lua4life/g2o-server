@@ -1,9 +1,10 @@
-class AIOrcWarriorRoam extends AIHumanoid {
+class AIOrcWarriorRoam extends AIOrcMelee {
     instance = "ORCWARRIOR_ROAM"
     attack_distance = 250
     target_distance = 1000
     chase_distance = 500
     warn_time = 3000
+    max_distance = 3000
     weapon_mode = WEAPONMODE_2HS
 
     function Setup() {

@@ -15,7 +15,7 @@ local function AI_Update() {
     // printf("AI: %d ms", getTickCount() - current_ts)
 }
 
-setTimer(AI_Update, 500, 0)
+setTimer(AI_Update, 100, 0)
 
 local function AI_HitNPC(pid, kid, desc) {
     if (kid != -1 && pid >= getMaxSlots()) {
