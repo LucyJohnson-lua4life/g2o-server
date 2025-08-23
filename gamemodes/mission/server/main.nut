@@ -1,7 +1,7 @@
 local function join_handler(pid) {
     sendMessageToAll(0, 255, 0, getPlayerName(pid) + " connected with the server.")
 
-	ClassFighter(pid)
+	ClassArcher(pid)
 	spawnPlayer(pid)
 	setPlayerPosition(pid, 0, 0, 0)
 }
@@ -14,7 +14,7 @@ local function respawn_handler(pid) {
 
     sendMessageToAll(255, 150, 0, getPlayerName(pid) + " has respawned.")
 
-	ClassFighter(pid)
+	ClassArcher(pid)
 	spawnPlayer(pid)
 }
 

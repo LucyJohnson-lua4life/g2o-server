@@ -20,6 +20,8 @@ local function get_wm_name(wm) {
 class AIOrcMelee extends AIAgressive {
 	attack_wait_time = 4000
 	last_attack_time = 0
+	max_distance = 3000
+	target_distance = 1000
 
 
 	function AttackMove(ts) {
@@ -126,7 +128,7 @@ class AIOrcMelee extends AIAgressive {
 	function OnHitReceived(kid, desc) {
 		if (this.enemy_id == -1) {
 			this.enemy_id = kid
-			print("New enemy on hit: " + kid)
+			this.warn_start = 1
 			return
 		}
 

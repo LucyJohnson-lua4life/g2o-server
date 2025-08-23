@@ -4,7 +4,6 @@ class AIOrcWarriorRoam extends AIOrcMelee {
     target_distance = 1000
     chase_distance = 500
     warn_time = 3000
-    max_distance = 3000
     weapon_mode = WEAPONMODE_2HS
 
     function Setup() {

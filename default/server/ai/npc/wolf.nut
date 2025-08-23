@@ -1,7 +1,7 @@
 class AIYoungWolf extends AIMonster {
     instance = "YWOLF"
     attack_distance = 300
-    target_distance = 1200
+    target_distance = 800
     chase_distance = 1000
     warn_time = 3000
 
@@ -17,7 +17,7 @@ class AIYoungWolf extends AIMonster {
 class AIWolf extends AIMonster {
     instance = "WOLF"
     attack_distance = 300
-    target_distance = 1200
+    target_distance = 800
     chase_distance = 1000
     warn_time = 3000
 

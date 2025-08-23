@@ -1,4 +1,10 @@
 class AIMonster extends AIAgressive {
+
+	attack_wait_time = 3000
+	last_attack_time = 0
+	max_distance = 3000
+    target_distance = 1000
+
 	function AttackRoutine(ts) {
 		AI_TurnToPlayer(this.id, this.enemy_id)
 		if ((this.wait_until - ts) > 0 || AI_WaitForAction(this.id, this.wait_for_action_id)) {
@@ -11,11 +17,16 @@ class AIMonster extends AIAgressive {
 		if (distance > this.attack_distance) {
 			if (!AI_Warn(this, ts)) {
 				// Warn finished, run to enemy
+				AI_TurnToPlayer(this.id, this.enemy_id)
 				playAni(this.id, "S_FISTRUNL")
 			}
-		} else {
+		} else if (ts - this.last_attack_time > this.attack_wait_time) {
 			npcAttackMelee(this.id, this.enemy_id, ATTACK_FORWARD, 1, true)
 			this.wait_for_action_id = getNpcLastActionId(this.id)
+			this.last_attack_time = ts
+			this.wait_until = ts + 1000 // Minimal attack time
+		} else {
+			this.ParadeMove()
 			this.wait_until = ts + 1000 // Minimal attack time
 		}
 	}
@@ -26,22 +37,30 @@ class AIMonster extends AIAgressive {
 		}
 	}
 
+
+	function ParadeMove() {
+		local action = rand() % 5
+		if (action < 3) {
+
+			playAni(this.id, "T_FISTPARADEJUMPB");
+		} else if (action < 4) {
+			playAni(this.id, "T_FISTRUNSTRAFER");
+		} else {
+			action = 2
+			playAni(this.id, "T_FISTRUNSTRAFEL");
+		}
+		this.wait_until = getTickCount() + 500
+	}
+
 	function OnHitReceived(kid, desc) {
+		if (this.enemy_id == -1) {
+			this.enemy_id = kid
+			return
+		}
+
 		local change_action = rand() % 100
 		if (change_action > 60) {
-			local action = rand() % 3
-			switch (action) {
-				case 0:
-					playAni(this.id, "T_FISTPARADEJUMPB");
-					break
-				case 1:
-					playAni(this.id, "T_FISTRUNSTRAFER");
-					break
-				case 2:
-					playAni(this.id, "T_FISTRUNSTRAFEL");
-					break
-			}
-
+			this.ParadeMove()
 			this.wait_for_action_id = getNpcLastActionId(this.id)
 		}
 

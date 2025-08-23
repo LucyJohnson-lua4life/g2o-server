@@ -1,67 +1,71 @@
 class AIAgressive extends AIBase {
-    enemy_id = -1
-    collect_target = AI_CollectNearestTarget
-    weapon_mode = null
+	enemy_id = -1
+	collect_target = AI_CollectNearestTarget
+	weapon_mode = null
 
-    // Consts
-    attack_distance = 300
-    target_distance = 1000
-    chase_distance = 1000
-    warn_time = 0
-    // AI vars
-    max_distance = 0
-    warn_start = 0
+	// Consts
+	attack_distance = 300
+	target_distance = 1000
+	chase_distance = 1000
+	warn_time = 0
+	// AI vars
+	max_distance = 0
+	warn_start = 0
 
-    function Reset() {
-        base.Reset()
-        this.wait_until = 0
-        this.warn_start = 0
-        this.max_distance = this.target_distance
-    }
+	function Reset() {
+		base.Reset()
+		this.wait_until = 0
+		this.warn_start = 0
+		this.enemy_id = -1
+	}
 
-    function ValidateEnemy() {
-        if (this.enemy_id != -1) {
-            if (!isPlayerConnected(this.enemy_id) || isPlayerDead(this.enemy_id)) {
-                return false
-            }
+	function ValidateEnemy() {
+		if (this.enemy_id != -1) {
+			if (!isPlayerConnected(this.enemy_id) || isPlayerDead(this.enemy_id)) {
+				return false
+			}
 
-            local distance = AI_GetDistancePlayers(this.id, this.enemy_id)
-            return distance <= this.max_distance
-        }
+			local distance = AI_GetDistancePlayers(this.id, this.enemy_id)
+			//print("Distance to enemy: " + distance)
 
-        return false
-    }
+			return distance <= this.max_distance
+		}
 
-    function Update(ts) {
-        if (isPlayerDead(this.id)) {
-            return
-        }
+		return false
+	}
 
-        if (!this.ValidateEnemy() && this.collect_target) {
-            local last_enemy_id = this.enemy_id
-            this.enemy_id = this.collect_target(this)
+	function Update(ts) {
+		if (isPlayerDead(this.id)) {
+			return
+		}
 
-            if (last_enemy_id != this.enemy_id) {
-                this.OnFocusChange(last_enemy_id, this.enemy_id)
-            }
-        }
+		if (!this.ValidateEnemy() && this.collect_target) {
+			local last_enemy_id = this.enemy_id
+			this.enemy_id = this.collect_target(this)
 
-        if (this.enemy_id != -1) {
-            this.AttackRoutine(ts)
-        } else {
-            this.DailyRoutine(ts)
-        }
-    }
+			if (last_enemy_id != this.enemy_id) {
+				this.OnFocusChange(last_enemy_id, this.enemy_id)
+			}
+		}
 
-    function AttackRoutine(ts) {
-        // Triggered when NPC has a valid enemy target
-    }
 
-    function DailyRoutine(ts) {
-        // Triggered when NPC has no enemy
-    }
 
-    function OnFocusChange(from, to) {
-        // Triggered when focused enemy has changed
-    }
+		if (this.enemy_id != -1) {
+			this.AttackRoutine(ts)
+		} else {
+			this.DailyRoutine(ts)
+		}
+	}
+
+	function AttackRoutine(ts) {
+		// Triggered when NPC has a valid enemy target
+	}
+
+	function DailyRoutine(ts) {
+		// Triggered when NPC has no enemy
+	}
+
+	function OnFocusChange(from, to) {
+		// Triggered when focused enemy has changed
+	}
 }
