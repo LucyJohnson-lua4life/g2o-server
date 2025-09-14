@@ -732,9 +732,16 @@ local function init_handler() {
     // AI_SpawnNPC(AIZombie.Create("ZOMBIE02"), 13692.50, 2796.41, 14470.67, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
     // AI_SpawnNPC(AIZombie.Create("ZOMBIE01"), 14195.75, 2683.32, 14190.00, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 
-    AI_SpawnNPC(AIOrcWarriorRoam.Create(), 750, 0, 0, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
-    AI_SpawnNPC(AIWolf.Create(), 0, 0, 500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
+   // AI_SpawnNPC(AIOrcWarriorRoam.Create(), 750, 0, 0, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
+    //AI_SpawnNPC(AIWolf.Create(), 0, 0, 500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 
+
+
+   local waypath = Way("NEWWORLD\\NEWWORLD.ZEN","HAFEN", "NW_CITY_BED_HALVOR")
+   local waypoints = waypath.getWaypoints()
+   foreach (wpname in waypoints) {
+    print("Waypoint: " + wpname)
+}
 }
 
 addEventHandler("onInit", init_handler)
