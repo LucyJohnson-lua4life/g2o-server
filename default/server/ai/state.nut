@@ -38,6 +38,7 @@ function AI_SpawnNPC(npc_state, x, y, z, angle, world) {
     setPlayerPosition(npc_state.id, x, y, z)
     setPlayerAngle(npc_state.id, angle)
     spawnPlayer(npc_state.id)
+    return npc_state
 }
 
 function AI_RemoveNPC(npc_state) {

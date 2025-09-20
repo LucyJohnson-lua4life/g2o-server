@@ -39,6 +39,12 @@ class AIAgressive extends AIBase {
 			return
 		}
 
+		if (("goto_is_active" in this.flags && this.flags.goto_is_active)) {
+			if (AI_Goto(this, this.flags.goto_target_name)) {
+				return
+			}
+		}
+
 		if (!this.ValidateEnemy() && this.collect_target) {
 			local last_enemy_id = this.enemy_id
 			this.enemy_id = this.collect_target(this)

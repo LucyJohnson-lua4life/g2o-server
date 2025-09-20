@@ -463,7 +463,6 @@ addEventHandler("onCommand", function(cmd, param)
 		case "chatclear":
 			Chat.clear()
 			break
-
 		case "chatlines":
 			try
 				param = param.tointeger()

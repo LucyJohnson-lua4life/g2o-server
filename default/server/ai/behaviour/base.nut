@@ -6,6 +6,7 @@ class AIBase {
     // AI vars
     wait_until = 0
     wait_for_action_id = -1
+    flags = {}
 
     constructor(npc_id) {
         this.id = npc_id
@@ -27,7 +28,7 @@ class AIBase {
         local state = this(npc_id)
         state.instance = instance
         state.Setup()
-        
+
         return state
     }
 
