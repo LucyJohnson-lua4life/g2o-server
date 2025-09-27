@@ -1,5 +1,5 @@
 <server>
-	<script src="helpers.nut" type="server" />
+	<script src="helpers.nut" type="shared" />
 	<script src="state.nut" type="server" />
 	<script src="update.nut" type="server" />
 

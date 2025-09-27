@@ -76,6 +76,39 @@ function AI_CollectNearestTarget(npc_state) {
 	return nearest_playerid
 }
 
+function getUnitCircleAngle(x1, y1, x2, y2) {
+	if (x1 == x2 && y1 == y2) {
+		return 0
+	}
+
+	local x = x2 - x1
+	local y = y2 - y1
+
+	local angle = atan(abs(y) / abs(x)) * 180.0 / 3.14
+
+	if (x < 0 && y > 0) {
+		angle = 180 - angle
+	} else if (x < 0 && y < 0) {
+		angle = angle + 180
+	} else if (x > 0 && y < 0) {
+		angle = 360 - angle
+	}
+
+
+
+	return angle;
+}
+
+
+
+function alignToDirection(playerid, dir_x, dir_z) {
+	local pos = getPlayerPosition(playerid);
+	local angle = getUnitCircleAngle(pos.x, pos.z, pos.x + dir_x, pos.z + dir_z);
+	setPlayerAngle(playerid, angle, true)
+}
+
+
+
 
 function refreshPosition(npc_state) {
 	npc_state.flags.last_pos_update <- getTickCount()
@@ -103,7 +136,6 @@ function moveByGoto(npc_state, target_waypoint) {
 			flags.current_pos_z <- current_pos.z
 			print("update current pos")
 		} else if (distance_moved < 2) {
-			distance_moved = 0
 
 			local time_diff = getTickCount() - flags.last_pos_update
 			local speed = (5 * 100) * (time_diff / 1000.0); // meter per seconds!
@@ -147,10 +179,8 @@ function AI_Goto(npc_state, target_position_name) {
 
 	if (!("goto_is_active" in flags)) {
 		print("Set goto for npc " + npc_state.id + " to " + target_position_name)
-
 		local pos = getPlayerPosition(npc_state.id)
 		local nearest_wp = getNearestWaypoint(world, 0, 0, 0)
-		//npc_state.is_in_goto_mode =
 		local wp = getWaypoint(world, target_position_name)
 		local way = Way(world, nearest_wp.name, target_position_name)
 
@@ -162,30 +192,28 @@ function AI_Goto(npc_state, target_position_name) {
 		flags.goto_target_name <- target_position_name
 	}
 
-	print("survived till here: " + flags.goto_route_index)
-	print("waypoints: " + flags.goto_way.getWaypoints())
-	print(flags.goto_way.getWaypoints()[flags.goto_route_index])
+	//print("survived till here: " + flags.goto_route_index)
+	//print("waypoints: " + flags.goto_way.getWaypoints())
+	//print(flags.goto_way.getWaypoints()[flags.goto_route_index])
 	local current_pos = getPlayerPosition(npc_state.id)
 	local next_target = getWaypoint(world, flags.goto_way.getWaypoints()[flags.goto_route_index])
 	moveByGoto(npc_state, next_target)
 	local distance_to_target = getDistance3d(current_pos.x, current_pos.y, current_pos.z, next_target.x, next_target.y, next_target.z)
-	print("distance: " + distance_to_target)
+	//print("distance: " + distance_to_target)
 	if (distance_to_target > 100) {
 		local walk_animation_name = "S_FISTWALKL"
-		print("survived till here2")
+		//	print("survived till here2")
 		AI_TurnToVec3(npc_state.id, next_target)
 		playAni(npc_state.id, walk_animation_name)
 	} else if (flags.goto_route_index < flags.goto_way.getCountWaypoints() - 1) {
-		print("increment!")
 		flags.goto_route_index = flags.goto_route_index + 1
-		print("i: " + flags.goto_route_index)
 	} else {
+		alignToDirection(npc_state.id, flags.goto_target_position.x, flags.goto_target_position.z)
 		delete flags.goto_way
 		delete flags.goto_route_index
 		delete flags.goto_is_active
 		delete flags.goto_target_position
 		delete flags.goto_target_name
-		// allign to target
 	}
 
 
