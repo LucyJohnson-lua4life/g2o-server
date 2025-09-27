@@ -94,11 +94,8 @@ function getUnitCircleAngle(x1, y1, x2, y2) {
 		angle = 360 - angle
 	}
 
-
-
 	return angle;
 }
-
 
 
 function alignToDirection(playerid, dir_x, dir_z) {
@@ -106,9 +103,6 @@ function alignToDirection(playerid, dir_x, dir_z) {
 	local angle = getUnitCircleAngle(pos.x, pos.z, pos.x + dir_x, pos.z + dir_z);
 	setPlayerAngle(playerid, angle, true)
 }
-
-
-
 
 function refreshPosition(npc_state) {
 	npc_state.flags.last_pos_update <- getTickCount()
@@ -209,6 +203,8 @@ function AI_Goto(npc_state, target_position_name) {
 		flags.goto_route_index = flags.goto_route_index + 1
 	} else {
 		alignToDirection(npc_state.id, flags.goto_target_position.x, flags.goto_target_position.z)
+		// do i even need alignToDirection here or is TurnToVec3 enough?
+		//AI_TurnToVec3(npc_state.id, next_target)
 		delete flags.goto_way
 		delete flags.goto_route_index
 		delete flags.goto_is_active

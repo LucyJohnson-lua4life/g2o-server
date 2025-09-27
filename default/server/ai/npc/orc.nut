@@ -7,7 +7,24 @@ class AIOrcWarriorRoam extends AIOrcMelee {
     weapon_mode = WEAPONMODE_2HS
 
     function Setup() {
-        setPlayerName(this.id, "Orc")
+        setPlayerName(this.id, "Orc Warrior")
+    }
+
+    function Spawn() {
+        setPlayerInstance(this.id, this.instance)
+    }
+}
+
+class AIOrcElite extends AIOrcMelee {
+    instance = "ORCELITE_ROAM"
+    attack_distance = 250
+    target_distance = 1000
+    chase_distance = 500
+    warn_time = 3000
+    weapon_mode = WEAPONMODE_2HS
+
+    function Setup() {
+        setPlayerName(this.id, "Orc Elite")
     }
 
     function Spawn() {
