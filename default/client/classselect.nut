@@ -1,16 +1,27 @@
-// function openClassSelect() {
-// 	 print("Opening class selection menu...")
-// 	 Camera.movementEnabled = false;
-// 	 Camera.modeChangeEnabled = false;
-// 	Camera.setRotation(0, 0, 0)
-// 	local playerPos = getPlayerPosition(heroId);
-// 	Camera.setPosition(playerPos.x, playerPos.y, playerPos.z - 200);
-// 	local playerAngle = getPlayerAngle(heroId)
+local class_selection_mode_data = {}
 
-// 	Camera.setRotation(0, playerAngle + 180, 0);
-// 	//Camera.setPosition(0, 0, 100)
-// }
+function incrementWithOverflow(value, increment, max) {
+	value += increment
+	if (value >= max) {
+		value = 0
+	} else if (value < 0) {
+		value = max - 1
+	}
+	return value
+}
 
+function decrementWithOverflow(value, decrement, max) {
+	value -= decrement
+	if (value < 0) {
+		value = max - 1
+	} else if (value >= max) {
+		value = 0
+	}
+	return value
+}
+
+
+MyLabel <- {}
 function openClassSelect() {
     print("Opening class selection menu...");
     Camera.movementEnabled = false;
@@ -29,6 +40,13 @@ function openClassSelect() {
 
     Camera.setPosition(playerPos.x + offsetX, playerPos.y + offsetY, playerPos.z + offsetZ);
     Camera.setRotation(0, playerAngle + 180, 0); // Look at player from front
+	MyLabel <- Label(anx(100), any(100), "TTTTTTTTTTTTTTTTTESSSSSSST")
+	MyLabel.visible = true
+
+	Chat.print(0, 255, 0, "test" + MyLabel.widthPx + " " + MyLabel.heightPx + " " + MyLabel.visible)
+	//local myLabel = Label(200, 500, "Test Label")
+
+
 }
 
 function closeClassSelect() {

@@ -1,4 +1,5 @@
 G2O_Server.x64
+squirrel-template.x64.so
 crashpad_handler
 cache
 .sentry-native

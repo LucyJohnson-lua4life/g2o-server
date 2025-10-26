@@ -10,6 +10,7 @@
         <wayfile map="NEWWORLD" src="waypoints/newworld.xml" />
 	<!-- Default -->
 
+    <module src="modules/squirrel-template.x64.so" type="server" />
 	<data src="data.xml" />
 	<import src="default/scripts.xml" />
 

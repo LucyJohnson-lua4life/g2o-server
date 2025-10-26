@@ -1,7 +1,7 @@
 local function init_handler() {
 
 	//////////////////////////////////////////////////////// these are the gma mobs //////////////////////////////////////////
-
+/*
 AI_SpawnNPC(AIWolf.Create(), 27862.978500, 2500.627440, 15108.812500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 AI_SpawnNPC(AIWarg.Create(), 22910.533200, 2751.633790, 29089.269500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 AI_SpawnNPC(AIScavenger.Create(), 2446.043210, 2172.181400, 15799.793000, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
@@ -444,7 +444,7 @@ AI_SpawnNPC(AIWarg.Create(), 20740.269500, 2673.270260, 16340.358400, 0.00, "NEW
 AI_SpawnNPC(AIWarg.Create(), 19529.060500, 2619.887700, 17520.718800, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 
 AI_SpawnNPC(AIOrcWarriorRoam.Create(), 25239.310500, 3184.113530, -21215.726600, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
-
+*/
 
 
 	::TEST_STATE <- AI_SpawnNPC(AIOrcWarriorRoam.Create(), 750, 0, 0, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
@@ -480,4 +480,4 @@ addEventHandler("onPlayerCommand", function(id, cmd, param) {
 					AI_Goto(AI_GetNPCState(32), "NW_CITY_BED_HALVOR")
 					break
 			}
-		})
+})

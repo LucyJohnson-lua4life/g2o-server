@@ -31,7 +31,7 @@ local PlayerListVisibleRow = class
 		columns = []
 
 		foreach (header in PlayerList._headers)
-			columns.push(Draw(0, 0, ""))
+			columns.push(Label(0, 0, ""))
 	}
 
 	function update(dataRow)
@@ -67,7 +67,7 @@ local PlayerListVisibleRow = class
 		foreach (id, column in columns)
 		{
 			column.setPositionPx(x + width, y)
-			width += (nax(headers[id].width) + headers[id].draw.widthPx)
+			width += (nax(headers[id].width) + headers[id].label.widthPx)
 		}
 	}
 
@@ -117,7 +117,7 @@ PlayerList <- {
 function PlayerList::init()
 {
 	// Create server name header
-	_hostname = Draw(0, 0, getHostname())
+	_hostname = Label(0, 0, getHostname())
 	_hostname.font = "FONT_OLD_20_WHITE_HI.TGA"
 	_hostname.setPositionPx(nax(4096 - _hostname.width / 2), y / 2)
 
@@ -126,8 +126,8 @@ function PlayerList::init()
 	COLUMN_NICKNAME = registerColumn("Nickname", 3000)
 	COLUMN_PING = registerColumn("Ping", 100)
 
-	// Add textures after this line...
-	registerTexture("MENU_INGAME.TGA", function()
+	// Add sprites after this line...
+	registerSprite("MENU_INGAME.TGA", function()
 	{
 		tex.setPositionPx(PlayerList.x - 25, PlayerList.y - 15)
 		tex.setSizePx(PlayerList.width + 50, PlayerList.height + 30)
@@ -149,21 +149,21 @@ function PlayerList::init()
 
 function PlayerList::registerColumn(name, width)
 {
-	local draw = Draw(0, 0, name)
-	draw.color.set(255, 255, 0)
+	local label = Label(0, 0, name)
+	label.color.set(255, 255, 0)
 
 	_headers.push({
 		name = name,
 		width = width,
-		draw = draw,
+		label = label,
 	})
 
 	return _headers.len() - 1
 }
 
-function PlayerList::registerTexture(name, resize)
+function PlayerList::registerSprite(name, resize)
 {
-	local tex = Texture(0, 0, 0, 0, name)
+	local tex = Sprite(0, 0, 0, 0, name)
 	local bg = {
 		resize = resize,
 		tex = tex,
@@ -181,7 +181,7 @@ function PlayerList::setVisible(visible)
 		bg.tex.visible = visible
 
 	foreach (header in _headers)
-		header.draw.visible = visible
+		header.label.visible = visible
 
 	foreach (visibleRow in visibleRows)
 		visibleRow.setVisible(visible)
@@ -232,10 +232,10 @@ function PlayerList::remove(pid)
 function PlayerList::resize()
 {
 	width = 0
-	height = _headers.top().draw.heightPx + _rowHeightPx * MAX_VISIBLE_ROWS
+	height = _headers.top().label.heightPx + _rowHeightPx * MAX_VISIBLE_ROWS
 
 	foreach (header in _headers)
-		width += (nax(header.width) + header.draw.widthPx)
+		width += (nax(header.width) + header.label.widthPx)
 
 	local headerX = x = (getResolution().x - width) / 2
 	local headerY = y
@@ -243,8 +243,8 @@ function PlayerList::resize()
 	width = 0
 	foreach (header in _headers)
 	{
-		header.draw.setPositionPx(headerX + width, headerY)
-		width += (nax(header.width) + header.draw.widthPx)
+		header.label.setPositionPx(headerX + width, headerY)
+		width += (nax(header.width) + header.label.widthPx)
 	}
 
 	local offset = _rowHeightPx

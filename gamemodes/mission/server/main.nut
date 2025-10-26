@@ -35,6 +35,9 @@ local function init_handler() {
     //AI_SpawnNPC(AIHumanBanditMelee.Create("BDT_10312_ADDON_RANGERBANDIT_L"), 800, 200, -1500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
     //AI_SpawnNPC(AIHumanBanditRanged.Create("BDT_10314_ADDON_RANGERBANDIT_M"), 900, 200, -1500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 	//AI_SpawnNPC(AIHumanBanditMelee.Create("BDT_1022_LEUCHTTURMBANDIT"),  200, 200, -1500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
+
+	local redisTest = RedisTest()
+	redisTest.introduce();
 }
 
 addEventHandler("onInit", init_handler)

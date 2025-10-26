@@ -3,7 +3,7 @@
 /////////////////////////////////////////
 
 NetStats <- {
-	_title = Draw(anx(5), any(5), "Network debug"),
+	_title = Label(anx(5), any(5), "Network debug"),
 	_ping = null,
 	_fps = null,
 	_receivedPackets = null,
@@ -23,15 +23,15 @@ function NetStats::init()
 	local y = any(7)
 	local height = _title.heightPx
 
-	_ping = Draw(x, y + any(height), "")
-	_fps = Draw(x, y + any(height * 2), "")
-	_receivedPackets = Draw(x, y + any(height * 3), "")
-	_lostPackets = Draw(x, y + any(height * 4), "")
-	_lostLastSec = Draw(x, y + any(height * 5), "")
-	_messageResend = Draw(x, y + any(height * 6), "")
-	_byteToResend = Draw(x, y + any(height * 7), "")
-	_messageSend = Draw(x, y + any(height * 8), "")
-	_byteToSend = Draw(x, y + any(height * 9), "")
+	_ping = Label(x, y + any(height), "")
+	_fps = Label(x, y + any(height * 2), "")
+	_receivedPackets = Label(x, y + any(height * 3), "")
+	_lostPackets = Label(x, y + any(height * 4), "")
+	_lostLastSec = Label(x, y + any(height * 5), "")
+	_messageResend = Label(x, y + any(height * 6), "")
+	_byteToResend = Label(x, y + any(height * 7), "")
+	_messageSend = Label(x, y + any(height * 8), "")
+	_byteToSend = Label(x, y + any(height * 9), "")
 
 	setTimer(function()
 	{
@@ -84,7 +84,7 @@ addEventHandler("onInit", function()
 })
 
 addEventHandler("onKeyDown", function(key)
-{	
+{
 	switch (key)
 	{
 		case KEY_F6:

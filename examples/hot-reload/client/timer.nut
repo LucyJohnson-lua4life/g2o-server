@@ -1,25 +1,25 @@
 local text = "Counter: "
 local counter = 0
 
-local draw = Draw(220, 7600, "")
+local Label = Label(220, 7600, "")
 
-local function updateDrawText()
+local function updateLabelText()
 {
 	++counter
-	draw.text = text + counter
+	Label.text = text + counter
 }
 
 local timer_id = -1
 
 local function onReload()
 {
-	// update draw text and show it
-	updateDrawText()
-	draw.visible = true
+	// update Label text and show it
+	updateLabelText()
+	Label.visible = true
 
 	// create a new timer that will be executed infinitely with one second delay
 	// try changing the arguments passed to this function
-	timer_id = setTimer(updateDrawText, 1000, 0)
+	timer_id = setTimer(updateLabelText, 1000, 0)
 }
 
 // register reload callback that will be called:

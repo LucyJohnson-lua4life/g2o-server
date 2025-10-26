@@ -6,7 +6,7 @@ local ChatLine = class
 {
 	constructor(r, g, b, text)
 	{
-		_line = Draw(0, 0, text)
+		_line = Label(0, 0, text)
 		_line.color.set(r, g, b)
 	}
 
@@ -46,7 +46,7 @@ local ChatPlayerLine = class extends ChatLine
 		base.constructor(r, g, b, text)
 
 		local color = getPlayerColor(pid)
-		_nickname = Draw(0, 0, getPlayerName(pid) + ": ")
+		_nickname = Label(0, 0, getPlayerName(pid) + ": ")
 		_nickname.color.set(color.r, color.g, color.b)
 	}
 
