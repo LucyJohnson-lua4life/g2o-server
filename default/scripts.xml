@@ -1,4 +1,5 @@
 <server>
+	<script src="shared/packetid.nut" type="shared" />
 	<script src="client/playerlist.nut" type="client" />
 	<script src="client/chat.nut" type="client" />	
 	<script src="client/net.nut" type="client" />

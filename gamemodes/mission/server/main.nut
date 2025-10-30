@@ -40,6 +40,7 @@ local function init_handler() {
 	redisTest.set("name", "Hans");
 
 
+	/*
 	local name = redisTest.get("name");
 	print("name: " + name);
 
@@ -52,6 +53,7 @@ local function init_handler() {
 	local age = to_container.a
 
 	print("jsontest: " + age);
+	*/
 }
 
 addEventHandler("onInit", init_handler)

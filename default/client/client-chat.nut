@@ -10,6 +10,19 @@ function debugprint(message){
 }
 
 
+function messagePassTest(message){
+    //local from_container = {a = 1.5, b = "hans", c = false, d = null, e = {f = [1, 2, [3, 4]]}}
+    //local json_string = JSON.dump_ansi(from_container, 2)
+
+	local packet = Packet()
+    Chat.print(0, 255, 0, PacketId.JSON)
+    Chat.print(0, 255, 0, message)
+	
+	packet.writeUInt8(PacketId.JSON)	
+	packet.writeString(message)
+	packet.send(RELIABLE)    
+}
+
 
 
 addEventHandler("onPlayerMessage", function(pid, r, g, b, message)
