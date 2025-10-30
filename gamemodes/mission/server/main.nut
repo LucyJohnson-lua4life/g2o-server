@@ -36,8 +36,22 @@ local function init_handler() {
     //AI_SpawnNPC(AIHumanBanditRanged.Create("BDT_10314_ADDON_RANGERBANDIT_M"), 900, 200, -1500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 	//AI_SpawnNPC(AIHumanBanditMelee.Create("BDT_1022_LEUCHTTURMBANDIT"),  200, 200, -1500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 
-	local redisTest = RedisTest()
-	redisTest.introduce();
+	local redisTest = RedisClient()
+	redisTest.set("name", "Hans");
+
+
+	local name = redisTest.get("name");
+	print("name: " + name);
+
+    local from_container = {a = 1.5, b = "hans", c = false, d = null, e = {f = [1, 2, [3, 4]]}}
+    local json_string = JSON.dump_ansi(from_container, 2)
+
+	print("json string: " + json_string);
+
+	local to_container = JSON.parse_ansi(json_string)
+	local age = to_container.a
+
+	print("jsontest: " + age);
 }
 
 addEventHandler("onInit", init_handler)

@@ -40,10 +40,10 @@ function openClassSelect() {
 
     Camera.setPosition(playerPos.x + offsetX, playerPos.y + offsetY, playerPos.z + offsetZ);
     Camera.setRotation(0, playerAngle + 180, 0); // Look at player from front
-	MyLabel <- Label(anx(100), any(100), "TTTTTTTTTTTTTTTTTESSSSSSST")
-	MyLabel.visible = true
+	//MyLabel <- Label(anx(100), any(100), "TTTTTTTTTTTTTTTTTESSSSSSST")
+	//MyLabel.visible = true
 
-	Chat.print(0, 255, 0, "test" + MyLabel.widthPx + " " + MyLabel.heightPx + " " + MyLabel.visible)
+	//Chat.print(0, 255, 0, "test" + MyLabel.widthPx + " " + MyLabel.heightPx + " " + MyLabel.visible)
 	//local myLabel = Label(200, 500, "Test Label")
 
 

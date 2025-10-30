@@ -447,8 +447,8 @@ AI_SpawnNPC(AIOrcWarriorRoam.Create(), 25239.310500, 3184.113530, -21215.726600,
 */
 
 
-	::TEST_STATE <- AI_SpawnNPC(AIOrcWarriorRoam.Create(), 750, 0, 0, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
-	print("TEST_STATE: " + ::TEST_STATE.id)
+	//::TEST_STATE <- AI_SpawnNPC(AIOrcWarriorRoam.Create(), 750, 0, 0, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
+	//print("TEST_STATE: " + ::TEST_STATE.id)
 	//AI_SpawnNPC(AIWolf.Create(), 0, 0, 500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 
 
