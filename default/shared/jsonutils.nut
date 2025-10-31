@@ -15,6 +15,8 @@ class JsonUtils {
 
 	static function getInJson(jsonString, key) {
 		local object = JSON.parse_ansi(jsonString)
+		if(!(key in object))
+			return null
 		return object[key]
 	}
 }

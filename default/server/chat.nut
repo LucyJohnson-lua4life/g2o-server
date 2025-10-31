@@ -17,13 +17,10 @@ addEventHandler("onPacket", function(pid, packet)
 	// read message
 
 	local message = packet.readString()
-
-	local heroId = JsonUtils.getInJson(message, "heroId")
-	print(heroId)
 	local to_container = JSON.parse_ansi(message)
 
 	if (("messageContext" in to_container) && to_container.messageContext == "setVisual") {
-		processSetVisual(heroId, to_container);
+		processSetVisual(to_container);
 		return
 	}
 })
@@ -45,11 +42,12 @@ function jsontest(){
 }
 
 
-function processSetVisual(heroId, visualPacket){
-	local id = heroId
-    local bodyModel = "Hum_Body_Naked0"
-    local bodyTxt = 0
-    local headModel = "Hum_Head_FatBald"
-	local headTxt = 0
+function processSetVisual(visualPacket){
+	print("processSetVisual called")
+	local id = visualPacket.heroId
+    local bodyModel = visualPacket.bodyModel
+    local bodyTxt = visualPacket.bodyTexture
+    local headModel = visualPacket.headModel
+	local headTxt = visualPacket.headTexture
     setPlayerVisual(id, bodyModel, bodyTxt, headModel, headTxt)
 }

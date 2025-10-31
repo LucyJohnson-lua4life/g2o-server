@@ -40,6 +40,7 @@ function openClassSelect() {
 
     Camera.setPosition(playerPos.x + offsetX, playerPos.y + offsetY, playerPos.z + offsetZ);
     Camera.setRotation(0, playerAngle + 180, 0); // Look at player from front
+	setFreeze(true)
 	//MyLabel <- Label(anx(100), any(100), "TTTTTTTTTTTTTTTTTESSSSSSST")
 	//MyLabel.visible = true
 
@@ -52,6 +53,7 @@ function openClassSelect() {
 function closeClassSelect() {
     Camera.movementEnabled = true;
     Camera.modeChangeEnabled = true;
+	setFreeze(false)
 }
 
 addEventHandler("onKeyDown", function(key)
