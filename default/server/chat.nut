@@ -9,7 +9,7 @@ addEventHandler("onPacket", function(pid, packet)
 	print("onPacket received from pid: " + pid)
 	// read unique packet id
 	local packetId = packet.readUInt8()
-    local heroId = packet.readUInt16()
+
 	// if the packet id doesn't match => stop code execution
 	if (packetId != PacketId.JSON)
 		return
@@ -18,6 +18,7 @@ addEventHandler("onPacket", function(pid, packet)
 
 	local message = packet.readString()
 
+	local heroId = JsonUtils.getInJson(message, "heroId")
 	print(heroId)
 	local to_container = JSON.parse_ansi(message)
 

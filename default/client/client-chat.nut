@@ -19,8 +19,8 @@ function messagePassTest(message){
     Chat.print(0, 255, 0, message)
 
 	packet.writeUInt8(PacketId.JSON)
-    packet.writeUInt16(heroId)
-	packet.writeString(message)
+    local messageWithHeroId = JsonUtils.setInJson(message, "heroId", heroId)
+	packet.writeString(messageWithHeroId)
 	packet.send(RELIABLE)
 }
 
