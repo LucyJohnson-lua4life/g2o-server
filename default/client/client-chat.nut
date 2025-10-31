@@ -17,13 +17,12 @@ function messagePassTest(message){
 	local packet = Packet()
     Chat.print(0, 255, 0, PacketId.JSON)
     Chat.print(0, 255, 0, message)
-	
-	packet.writeUInt8(PacketId.JSON)	
+
+	packet.writeUInt8(PacketId.JSON)
+    packet.writeUInt16(heroId)
 	packet.writeString(message)
-	packet.send(RELIABLE)    
+	packet.send(RELIABLE)
 }
-
-
 
 addEventHandler("onPlayerMessage", function(pid, r, g, b, message)
 {

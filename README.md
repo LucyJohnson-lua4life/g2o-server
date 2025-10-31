@@ -13,3 +13,16 @@ You need to generate this file by yourself, in order to do that:
 #### This file needs to be regenerated when you introduce new changes to:
 - your game scripts (**gothic.dat**)
 - your model scripts (.mds, e.g: **Humans.mds**)
+
+
+
+
+
+# TODO:
+* setup a unified way of transporting data between CEF <-> client <-> server
+** json format probably works best (since we also will need it for redis)
+*** need helpers to process on json strings (set, get, remove value from json string)
+** add packet api to send json data with context freely
+
+
+* cleanup directory structure. root -> server or client, instead of having directories like gamemode etc.
