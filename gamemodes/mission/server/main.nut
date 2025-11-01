@@ -39,6 +39,13 @@ local function init_handler() {
 	local redisTest = RedisClient()
 	redisTest.set("name", "Hans");
 
+	local playerRepo = PlayerRepository()
+	local playerData = {level = 5, experience = 1500, health = 100}
+	playerRepo.setPlayer(redisTest, "Hans", playerData)
+
+	print(playerRepo.getPlayerJson(redisTest, "Hans"))
+
+
 
 	/*
 	local name = redisTest.get("name");

@@ -56,6 +56,12 @@ function closeClassSelect() {
 	setFreeze(false)
 }
 
+function testAttack(){
+  local focus = getFocusNpc()
+  Chat.print(0, 255, 0, "focus: " + focus)
+  attackPlayerWithEffect(heroId, focus, DAMAGE_FIRE, 200, true, 1, "spellFX_InstantFireball")
+}
+
 addEventHandler("onKeyDown", function(key)
 {
 	// switch (key)
@@ -79,7 +85,7 @@ addEventHandler("onCommand", function(cmd, param) {
 			closeClassSelect()
 			break
 		case "elo":
-			print("helo")
+			testAttack()
 			break
 
 	}

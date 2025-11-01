@@ -13,6 +13,9 @@ function AI_GetAngleToPlayer(from, to) {
 }
 
 function AI_TurnToPlayer(from, to) {
+	if(from == -1 || to == -1) {
+		return
+	}
 	local from_pos = getPlayerPosition(from)
 	local to_pos = getPlayerPosition(to)
 

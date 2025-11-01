@@ -26,3 +26,5 @@ You need to generate this file by yourself, in order to do that:
 
 
 * cleanup directory structure. root -> server or client, instead of having directories like gamemode etc.
+
+

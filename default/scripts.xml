@@ -10,5 +10,6 @@
 
 	<script src="server/acp.nut" type="server" />
 	<script src="server/chat.nut" type="server" />	
+	<script src="server/repository/playerRepository.nut" type="server" />	
 	<import src="server/ai/ai.xml" />
 </server>

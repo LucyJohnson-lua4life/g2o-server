@@ -1,7 +1,7 @@
 
 local browser = Browser(0, 0, 8192, 8192, "cef://index.html")
-browser.visible = true
-setCursorVisible(true)
+//browser.visible = true
+//setCursorVisible(true)
 
 
 function debugprint(message){
