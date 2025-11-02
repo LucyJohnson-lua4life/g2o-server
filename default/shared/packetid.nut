@@ -1,7 +1,7 @@
 enum PacketId
 {
     MESSAGE,
-    LERP,
-    CALL,
-    JSON
+    SERVER_COMMAND,
+    JSON,
+    CEF
 }

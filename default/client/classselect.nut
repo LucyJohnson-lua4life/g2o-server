@@ -62,6 +62,12 @@ function testAttack(){
   attackPlayerWithEffect(heroId, focus, DAMAGE_FIRE, 200, true, 1, "spellFX_InstantFireball")
 }
 
+function getPosition(){
+	local p = getPlayerPosition(heroId)
+	local angle = getPlayerAngle(heroId)
+	Chat.print(0, 255, 0, "pos: " + p.x + "," + p.y + "," + p.z + " angle: " + angle)
+}
+
 addEventHandler("onKeyDown", function(key)
 {
 	// switch (key)
@@ -87,7 +93,9 @@ addEventHandler("onCommand", function(cmd, param) {
 		case "elo":
 			testAttack()
 			break
-
+		case "pos":
+			getPosition()
+			break
 	}
 
 

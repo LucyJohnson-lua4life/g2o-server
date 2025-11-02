@@ -3,7 +3,12 @@ local function join_handler(pid) {
 
 	ClassFighter(pid)
 	spawnPlayer(pid)
-	setPlayerPosition(pid, 0, 0, 0)
+	setPlayerPosition(pid, 3062.53,853.732,8001.67)
+	setPlayerAngle(pid, 332.03)
+	local packet = Packet()
+	packet.writeUInt8(PacketId.SERVER_COMMAND)
+	packet.writeString("setCharacterCreationMode")
+	packet.send(pid, RELIABLE)	
 }
 
 addEventHandler("onPlayerJoin", join_handler)
