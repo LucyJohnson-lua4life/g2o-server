@@ -5,10 +5,8 @@ local function join_handler(pid) {
 	spawnPlayer(pid)
 	setPlayerPosition(pid, 3062.53,853.732,8001.67)
 	setPlayerAngle(pid, 332.03)
-	local packet = Packet()
-	packet.writeUInt8(PacketId.SERVER_COMMAND)
-	packet.writeString("setCharacterCreationMode")
-	packet.send(pid, RELIABLE)	
+
+	PacketWriter.sendServerCommandPacket(pid, "setCharacterCreationMode")
 }
 
 addEventHandler("onPlayerJoin", join_handler)

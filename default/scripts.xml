@@ -1,6 +1,8 @@
 <server>
     <script src="shared/jsonutils.nut" type="shared" />
 	<script src="shared/packetid.nut" type="shared" />
+	<script src="shared/packet-reader.nut" type="shared" />
+	<script src="shared/packet-writer.nut" type="shared" />	
 	<script src="client/playerlist.nut" type="client" />
 	<script src="client/chat.nut" type="client" />	
 	<script src="client/net.nut" type="client" />

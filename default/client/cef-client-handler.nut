@@ -26,17 +26,20 @@ function setCharacterCreationMode() {
 addEventHandler("onPacket", function(packet)
 {
 	// read unique packet id
-	local packetId = packet.readUInt8()
+	local packetContent = PacketReader.readPacket(packet)
 
 	// if the packet id doesn't match => stop code execution
-	if (packetId != PacketId.SERVER_COMMAND)
+	if (packetContent.packetId != PacketId.SERVER_COMMAND)
 		return
 
 	// read message
-	local message = packet.readString()
+	local command = packetContent.command
+    // IMPORTANT: SET character creation Mode only for the heroId that is determined by the server!!!!
 
-	if(message == "setCharacterCreationMode"){
-		setCharacterCreationMode()		
+	Chat.print(0, 255, 0, "Received server command: " + command + " for playerId: " + packetContent.playerId)
+
+	if(command == "setCharacterCreationMode" && heroId == packetContent.playerId){
+		setCharacterCreationMode()
 	}
 
 })
@@ -47,12 +50,7 @@ function clientDebugPrint(message){
 
 
 function sendToServerHandler(message){
-	local packet = Packet()
-
-	packet.writeUInt8(PacketId.CEF)
-    local messageWithHeroId = JsonUtils.setInJson(message, "heroId", heroId)
-	packet.writeString(messageWithHeroId)
-	packet.send(RELIABLE)
+	PacketWriter.sendCefPacket(heroId, message)
 }
 
 function sendToClientHandler(message){
