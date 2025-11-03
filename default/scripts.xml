@@ -1,18 +1,20 @@
 <server>
     <script src="shared/jsonutils.nut" type="shared" />
 	<script src="shared/packetid.nut" type="shared" />
-	<script src="shared/packet-reader.nut" type="shared" />
-	<script src="shared/packet-writer.nut" type="shared" />	
+	<script src="shared/packetReader.nut" type="shared" />
+	<script src="shared/packetWriter.nut" type="shared" />	
 	<script src="client/playerlist.nut" type="client" />
 	<script src="client/chat.nut" type="client" />	
 	<script src="client/net.nut" type="client" />
 	<script src="client/classselect.nut" type="client" />
-	<script src="client/cef-client-handler.nut" type="client" />
+	<script src="client/cefClientHandler.nut" type="client" />
     
 
 	<script src="server/acp.nut" type="server" />
 	<script src="server/chat.nut" type="server" />	
 	<script src="server/repository/playerRepository.nut" type="server" />	
-	<script src="server/authentication/authentication-handler.nut" type="server" />	
+	<script src="server/repository/inventoryRepository.nut" type="server" />	
+	<script src="server/redisClientProvider.nut" type="server" />	
+	<script src="server/authentication/authenticationHandler.nut" type="server" />	
 	<import src="server/ai/ai.xml" />
 </server>

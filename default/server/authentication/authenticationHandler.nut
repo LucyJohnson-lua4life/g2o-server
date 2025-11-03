@@ -1,3 +1,5 @@
+local redisClient = RedisClientProvider.getClient()
+
 addEventHandler("onPacket", function(pid, packet) {
 
 
@@ -16,24 +18,21 @@ addEventHandler("onPacket", function(pid, packet) {
 	}
 })
 
-function jsontest() {
-	local from_container = {
-		a = 1.5,
-		b = "hans",
-		c = false,
-		d = null,
-		e = {
-			f = [1, 2, [3, 4]]
+function handleLogin(playerId, username, passwordSha){
+
+	local userData = PlayerRepository.getPlayerByName(redisClient, username)
+	if(userData == null){
+		PacketWriter.sendServerCommandPacket(playerId, "loginFailed")
+	}else{
+
+		if(userData.passwordSha == passwordSha){
+			PacketWriter.sendServerCommandPacket(playerId, "loginSuccess")
+		}else{
+			PacketWriter.sendServerCommandPacket(playerId, "loginFailed")
 		}
 	}
-	local json_string = JSON.dump_ansi(from_container, 2)
 
 
-
-	local message = JSON.parse_ansi(json_string)
-	local age = message.a
-
-	print("jsontest: " + age);
 }
 
 

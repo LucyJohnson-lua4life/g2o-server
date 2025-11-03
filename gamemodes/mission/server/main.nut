@@ -39,14 +39,14 @@ local function init_handler() {
     //AI_SpawnNPC(AIHumanBanditRanged.Create("BDT_10314_ADDON_RANGERBANDIT_M"), 900, 200, -1500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 	//AI_SpawnNPC(AIHumanBanditMelee.Create("BDT_1022_LEUCHTTURMBANDIT"),  200, 200, -1500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 
-	local redisTest = RedisClient()
-	redisTest.set("name", "Hans");
+	//local redisTest = RedisClient()
+	//redisTest.set("name", "Hans");
 
-	local playerRepo = PlayerRepository()
-	local playerData = {level = 5, experience = 1500, health = 100}
-	playerRepo.setPlayer(redisTest, "Hans", playerData)
+	//local playerRepo = PlayerRepository()
+	//local playerData = {level = 5, experience = 1500, health = 100}
+	//playerRepo.setPlayer(redisTest, "Hans", playerData)
 
-	print(playerRepo.getPlayerJson(redisTest, "Hans"))
+	//print(playerRepo.getPlayerJson(redisTest, "Hans"))
 
 
 
