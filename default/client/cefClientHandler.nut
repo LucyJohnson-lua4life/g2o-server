@@ -56,6 +56,11 @@ function sendToServerHandler(message) {
 	PacketWriter.sendCefPacket(heroId, message)
 }
 
+
+function cefLog(message) {
+	Chat.print(0, 255, 0, "" + message)
+}
+
 function sendToClientHandler(message) {
 
 	local message = packet.readString()
