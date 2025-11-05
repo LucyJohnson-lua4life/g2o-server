@@ -28,8 +28,13 @@ addEventHandler("onPacket", function(packet) {
 	local packetContent = PacketReader.readPacket(packet)
 
 	// if the packet id doesn't match => stop code execution
-	if (packetContent.packetId != PacketId.SERVER_COMMAND)
+	if (packetContent.packetId != PacketId.SERVER_COMMAND) {
 		return
+	}
+	if (packetContent.playerId != heroId) {
+		return
+	}
+
 
 	// read message
 	local command = packetContent.command
@@ -37,12 +42,16 @@ addEventHandler("onPacket", function(packet) {
 
 	Chat.print(0, 255, 0, "Received server command: " + command + " for playerId: " + packetContent.playerId)
 
-	if (command == "setCharacterCreationMode" && heroId == packetContent.playerId) {
+	if (command == "setCharacterCreationMode") {
 		setCharacterCreationMode()
-	} else if (command == "loginSuccess" && heroId == packetContent.playerId) {
+	} else if (command == "loginSuccess") {
 		browser.call("runLoginSuccess")
-	} else if (command == "loginFailed" && heroId == packetContent.playerId) {
+	} else if (command == "loginFailed") {
 		browser.call("runLoginFailed")
+	} else if (command == "registrationUserExists") {
+		browser.call("runRegistrationUserExists")
+	} else if (command == "registrationSuccess") {
+		browser.call("runRegistrationSuccess")
 	}
 
 })
