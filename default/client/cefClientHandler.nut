@@ -44,8 +44,11 @@ addEventHandler("onPacket", function(packet) {
 
 	if (command == "setCharacterCreationMode") {
 		setCharacterCreationMode()
-		local message = { messageContext = "setCharacterCreationMode" }
-		PacketWriter.sendCefPacket(heroId, JsonUtils.toJson(message))
+		local message = JsonUtils.toJson({
+			messageContext = "setCharacterCreationMode"
+		})
+		Chat.print(0, 255, 0, message)
+		PacketWriter.sendCefPacket(heroId, message)
 	} else if (command == "loginSuccess") {
 		Camera.movementEnabled = true;
 		Camera.modeChangeEnabled = true;

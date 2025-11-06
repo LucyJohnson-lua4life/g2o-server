@@ -2,36 +2,29 @@
 ///	Line types
 /////////////////////////////////////////
 
-local ChatLine = class
-{
-	constructor(r, g, b, text)
-	{
+local ChatLine = class {
+	constructor(r, g, b, text) {
 		_line = Label(0, 0, text)
 		_line.color.set(r, g, b)
 	}
 
-	function getVisible()
-	{
+	function getVisible() {
 		return _line.visible
 	}
 
-	function setVisible(visible)
-	{
+	function setVisible(visible) {
 		_line.visible = visible
 	}
 
-	function setPosition(x, y)
-	{
+	function setPosition(x, y) {
 		_line.setPositionPx(x, y)
 	}
 
-	function setAlpha(alpha)
-	{
+	function setAlpha(alpha) {
 		_line.color.a = alpha
 	}
 
-	function heightPx()
-	{
+	function heightPx() {
 		return _line.heightPx
 	}
 
@@ -39,10 +32,8 @@ local ChatLine = class
 	_alphaAnimationBeginTime = -1
 }
 
-local ChatPlayerLine = class extends ChatLine
-{
-	constructor(pid, r, g, b, text)
-	{
+local ChatPlayerLine = class extends ChatLine {
+	constructor(pid, r, g, b, text) {
 		base.constructor(r, g, b, text)
 
 		local color = getPlayerColor(pid)
@@ -50,31 +41,26 @@ local ChatPlayerLine = class extends ChatLine
 		_nickname.color.set(color.r, color.g, color.b)
 	}
 
-	function getVisible()
-	{
+	function getVisible() {
 		return _line.visible
 	}
 
-	function setVisible(visible)
-	{
+	function setVisible(visible) {
 		base.setVisible(visible)
 		_nickname.visible = visible
 	}
 
-	function setPosition(x, y)
-	{
+	function setPosition(x, y) {
 		base.setPosition(_nickname.widthPx + x, y)
 		_nickname.setPositionPx(x, y)
 	}
 
-	function setAlpha(alpha)
-	{
+	function setAlpha(alpha) {
 		base.setAlpha(alpha)
 		_nickname.color.a = alpha
 	}
 
-	function heightPx()
-	{
+	function heightPx() {
 		return _nickname.heightPx
 	}
 
@@ -108,28 +94,23 @@ Chat <- {
 	_moveLinesAnimationBeginTime = -1
 }
 
-function Chat::foreachVisibleLine(callback)
-{
+function Chat::foreachVisibleLine(callback) {
 	for (local i = firstVisibleLine(), end = lastVisibleLine(); i <= end; ++i)
 		callback(_lines[i])
 }
 
-function Chat::setVisible(visible)
-{
+function Chat::setVisible(visible) {
 	this.visible = visible
 
-	foreachVisibleLine(function(line)
-	{
+	foreachVisibleLine(function(line) {
 		line.setVisible(visible)
 	})
 }
 
-function Chat::printPlayer(pid, r, g, b, msg)
-{
+function Chat::printPlayer(pid, r, g, b, msg) {
 	local lines = split(msg.tostring(), "\n")
 
-	foreach (line in lines)
-	{
+	foreach(line in lines) {
 		_printLine(ChatPlayerLine(pid, r, g, b, line))
 
 		if (pid == heroId)
@@ -137,16 +118,14 @@ function Chat::printPlayer(pid, r, g, b, msg)
 	}
 }
 
-function Chat::print(r, g, b, msg)
-{
+function Chat::print(r, g, b, msg) {
 	local lines = split(msg.tostring(), "\n")
 
-	foreach (line in lines)
-		_printLine(ChatLine(r, g, b, line))
+	foreach(line in lines)
+	_printLine(ChatLine(r, g, b, line))
 }
 
-function Chat::_printLine(line)
-{
+function Chat::_printLine(line) {
 	_lines.push(line)
 
 	local lastVisibleLine = _lines[lastVisibleLine()]
@@ -154,14 +133,12 @@ function Chat::_printLine(line)
 	if (visible && !lastVisibleLine.getVisible())
 		lastVisibleLine.setVisible(true)
 
-	if (animationInterval > 0)
-	{
+	if (animationInterval > 0) {
 		lastVisibleLine.setAlpha(0)
 		lastVisibleLine._alphaAnimationBeginTime = getTickCount()
 	}
 
-	if (_lines.len() > _maxLines)
-	{
+	if (_lines.len() > _maxLines) {
 		_lines[firstVisibleLine() - 1].setVisible(false)
 
 		if (_lines.len() > _historySize)
@@ -171,17 +148,14 @@ function Chat::_printLine(line)
 			_moveLinesAnimationBeginTime = getTickCount()
 		else
 			_calcPosition()
-	}
-	else
+	} else
 		_calcPosition()
 }
 
-function Chat::_calcPosition()
-{
+function Chat::_calcPosition() {
 	local offset = 0
 
-	foreachVisibleLine(function(line)
-	{
+	foreachVisibleLine(function(line) {
 		if (visible && !line.getVisible())
 			line.setVisible(true)
 
@@ -192,15 +166,12 @@ function Chat::_calcPosition()
 	chatInputSetPosition(x, any(y + offset))
 }
 
-function Chat::clear()
-{
+function Chat::clear() {
 	_lines.clear()
 }
 
-function Chat::setHistorySize(historySize)
-{
-	if (historySize >= _maxLines && _historySize > historySize)
-	{
+function Chat::setHistorySize(historySize) {
+	if (historySize >= _maxLines && _historySize > historySize) {
 		for (local i = 0, end = _lines.len() - historySize; i < end; ++i)
 			_lines.pop()
 	}
@@ -208,23 +179,19 @@ function Chat::setHistorySize(historySize)
 	_historySize = historySize
 }
 
-function Chat::lines()
-{
+function Chat::lines() {
 	return _lines.len()
 }
 
-function Chat::maxLines()
-{
+function Chat::maxLines() {
 	return _maxLines
 }
 
-function Chat::setMaxLines(maxLines)
-{
+function Chat::setMaxLines(maxLines) {
 	if (maxLines <= 0 || maxLines > 30)
 		return
 
-	foreachVisibleLine(function(line)
-	{
+	foreachVisibleLine(function(line) {
 		line.setVisible(false)
 	})
 
@@ -235,13 +202,11 @@ function Chat::setMaxLines(maxLines)
 		setHistorySize(maxLines)
 }
 
-function Chat::location()
-{
+function Chat::location() {
 	return _location
 }
 
-function Chat::firstVisibleLine()
-{
+function Chat::firstVisibleLine() {
 	local idx = _lines.len() - _maxLines + _location
 
 	if (idx < 0)
@@ -250,16 +215,14 @@ function Chat::firstVisibleLine()
 	return idx
 }
 
-function Chat::lastVisibleLine()
-{
+function Chat::lastVisibleLine() {
 	if (!_lines.len())
 		return -1
 
 	return _lines.len() - 1 + _location
 }
 
-function Chat::setLocation(newLocation)
-{
+function Chat::setLocation(newLocation) {
 	if (_location == newLocation)
 		return
 
@@ -269,8 +232,7 @@ function Chat::setLocation(newLocation)
 	if ((_lines.len() - _maxLines + newLocation < 0) || (newLocation > 0))
 		return
 
-	foreachVisibleLine(function(line)
-	{
+	foreachVisibleLine(function(line) {
 		line.setVisible(false)
 	})
 
@@ -278,21 +240,18 @@ function Chat::setLocation(newLocation)
 	_calcPosition()
 }
 
-function Chat::setInputHistorySize(size)
-{
+function Chat::setInputHistorySize(size) {
 	if (_inputHistorySize > size)
 		loadInputHistoryMessage(0)
 
 	_inputHistorySize = size
 }
 
-function Chat::inputHistoryLocation()
-{
+function Chat::inputHistoryLocation() {
 	return _inputHistoryLocation
 }
 
-function Chat::pushInputHistoryMessage(message)
-{
+function Chat::pushInputHistoryMessage(message) {
 	if (_inputHistorySize <= 0)
 		return
 
@@ -305,8 +264,7 @@ function Chat::pushInputHistoryMessage(message)
 		LocalStorage.setItem("chatInputHistory", _inputHistory)
 }
 
-function Chat::loadInputHistoryMessage(newLocation)
-{
+function Chat::loadInputHistoryMessage(newLocation) {
 	if (_inputHistoryLocation == newLocation)
 		return
 
@@ -320,8 +278,7 @@ function Chat::loadInputHistoryMessage(newLocation)
 	chatInputSetText((newLocation != 0) ? _inputHistory[_inputHistory.len() + newLocation] : "")
 }
 
-function Chat::moveLineAnimation(idx, line, now)
-{
+function Chat::moveLineAnimation(idx, line, now) {
 	if (_moveLinesAnimationBeginTime == -1)
 		return
 
@@ -330,15 +287,13 @@ function Chat::moveLineAnimation(idx, line, now)
 
 	if (deltaTime < 1.0)
 		line.setPosition(x, y + lineHeightPx * (idx + 1) - lineHeightPx * deltaTime)
-	else
-	{
+	else {
 		_calcPosition()
 		_moveLinesAnimationBeginTime = -1
 	}
 }
 
-function Chat::showLineAnimation(line, now)
-{
+function Chat::showLineAnimation(line, now) {
 	if (line._alphaAnimationBeginTime == -1)
 		return
 
@@ -346,8 +301,7 @@ function Chat::showLineAnimation(line, now)
 
 	if (deltaTime < 1.0)
 		line.setAlpha(255 * deltaTime)
-	else
-	{
+	else {
 		line.setAlpha(255)
 		line._alphaAnimationBeginTime = -1
 	}
@@ -357,145 +311,149 @@ function Chat::showLineAnimation(line, now)
 ///	Events
 /////////////////////////////////////////
 
-addEventHandler("onInit", function()
-{
+addEventHandler("onInit", function() {
 	Chat._calcPosition()
 
 	if (Chat._localStorageAvailable)
 		Chat._inputHistory = LocalStorage.getItem("chatInputHistory") || []
 })
 
-addEventHandler("onRender", function()
-{
+addEventHandler("onRender", function() {
 	if (Chat.animationInterval <= 0)
 		return
 
 	local now = getTickCount()
 	local idx = 0
 
-	Chat.foreachVisibleLine(function(line)
-	{
+	Chat.foreachVisibleLine(function(line) {
 		Chat.moveLineAnimation(idx, line, now)
 		Chat.showLineAnimation(line, now)
 
-		++idx
+			++idx
 	})
 })
 
-addEventHandler("onKeyDown", function(key)
-{
-	if (chatInputIsOpen())
-	{
-		switch (key)
-		{
-		case KEY_UP:
-			if (isKeyPressed(KEY_LCONTROL) || isKeyPressed(KEY_RCONTROL))
-				Chat.loadInputHistoryMessage(Chat.inputHistoryLocation() - 1)
-			else
-				Chat.setLocation(Chat.location() - 1)
-			break
+addEventHandler("onKeyDown", function(key) {
+	if (chatInputIsOpen()) {
+		switch (key) {
+			case KEY_UP:
+				if (isKeyPressed(KEY_LCONTROL) || isKeyPressed(KEY_RCONTROL))
+					Chat.loadInputHistoryMessage(Chat.inputHistoryLocation() - 1)
+				else
+					Chat.setLocation(Chat.location() - 1)
+				break
 
-		case KEY_DOWN:
-			if (isKeyPressed(KEY_LCONTROL) || isKeyPressed(KEY_RCONTROL))
-				Chat.loadInputHistoryMessage(Chat.inputHistoryLocation() + 1)
-			else
-				Chat.setLocation(Chat.location() + 1)
-			break
+			case KEY_DOWN:
+				if (isKeyPressed(KEY_LCONTROL) || isKeyPressed(KEY_RCONTROL))
+					Chat.loadInputHistoryMessage(Chat.inputHistoryLocation() + 1)
+				else
+					Chat.setLocation(Chat.location() + 1)
+				break
 
-		case KEY_PRIOR:
-			Chat.setLocation(-(Chat.lines() - Chat.maxLines()))
-			break
+			case KEY_PRIOR:
+				Chat.setLocation(-(Chat.lines() - Chat.maxLines()))
+				break
 
-		case KEY_NEXT:
-			Chat.setLocation(0)
-			break
+			case KEY_NEXT:
+				Chat.setLocation(0)
+				break
 
-		case KEY_RETURN:
-			Chat.setLocation(0)
-			chatInputSend()
-			Chat.loadInputHistoryMessage(0)
+			case KEY_RETURN:
+				Chat.setLocation(0)
+				chatInputSend()
+				Chat.loadInputHistoryMessage(0)
 
-			disableControls(false)
-			break
+				disableControls(false)
+				break
 
-		case KEY_HOME:
-			chatInputSetCaretPosition(0)
-			break
+			case KEY_HOME:
+				chatInputSetCaretPosition(0)
+				break
 
-		case KEY_END:
-			chatInputSetCaretPosition(chatInputGetText().len())
-			break
+			case KEY_END:
+				chatInputSetCaretPosition(chatInputGetText().len())
+				break
 
-		case KEY_ESCAPE:
-			chatInputClose()
-			disableControls(false)
-			cancelEvent()
-			break
+			case KEY_ESCAPE:
+				chatInputClose()
+				disableControls(false)
+				cancelEvent()
+				break
 
-		default:
-			playGesticulation(heroId)
-			break
+			default:
+				playGesticulation(heroId)
+				break
 		}
-	}
-	else
-	{
-		switch (key)
-		{
-		case KEY_T:
-			if (!isConsoleOpen() && Chat.visible)
-			{
-				chatInputOpen()
-				disableControls(true)
-			}
-			break
+	} else {
+		switch (key) {
+			case KEY_T:
+				if (!isConsoleOpen() && Chat.visible) {
+					chatInputOpen()
+					disableControls(true)
+				}
+				break
 
-		case KEY_F7:
-			Chat.setVisible(!Chat.visible)
-			break
+			case KEY_F7:
+				Chat.setVisible(!Chat.visible)
+				break
 		}
 	}
 })
 
-addEventHandler("onCommand", function(cmd, param)
-{
-	switch (cmd)
-	{
+addEventHandler("onCommand", function(cmd, param) {
+	switch (cmd) {
 		case "chatclear":
 			Chat.clear()
 			break
 		case "chatlines":
 			try
-				param = param.tointeger()
+			param = param.tointeger()
 			catch (msg)
-				return
+			return
 
 			Chat.setMaxLines(param)
 			break
 
 		case "chatlimit":
 			try
-				param = param.tointeger()
+			param = param.tointeger()
 			catch (msg)
-				return
+			return
 
 			Chat.setHistorySize(param)
 			break
 
 		case "chatinputlimit":
 			try
-				param = param.tointeger()
+			param = param.tointeger()
 			catch (msg)
-				return
-
+			return
 			Chat.setInputHistorySize(param)
 			break
+		case "apply":
+			local effectName = "" + param
+			Chat.print(0, 255, 0, effectName)
+			addEffect(heroId, "" + effectName)
+			break
+		case "glow":
+			addEffect(heroId, "spellFX_INCOVATION_BLUE")
+			break
+		case "speed":
+			setPlayerAniFpsRateMultiplier(heroId, "S_RUNL", 1.5)
+			break
+		case "slow":
+			setPlayerAniFpsRateMultiplier(heroId, "S_RUNL", 1)
+			break
+		case "speedo":
+			setPlayerAniFpsRateMultiplier(heroId, "S_RUNL", 5)
+			break
+
 	}
 
 	Chat.pushInputHistoryMessage("/" + cmd + ((param == "") ? "" : " " + param))
 })
 
-addEventHandler("onMouseWheel", function(direction)
-{
+addEventHandler("onMouseWheel", function(direction) {
 	if (!Chat.visible)
 		return
 
@@ -508,8 +466,7 @@ addEventHandler("onMouseWheel", function(direction)
 		Chat.setLocation(Chat.location() - direction)
 })
 
-addEventHandler("onPlayerMessage", function(pid, r, g, b, message)
-{
+addEventHandler("onPlayerMessage", function(pid, r, g, b, message) {
 	if (pid != null)
 		Chat.printPlayer(pid, r, g, b, message)
 	else

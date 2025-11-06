@@ -4,7 +4,7 @@ class JsonUtils {
 	}
 
 	static function toJson(object) {
-		return JSON.dump_ansi(from_container, 2)
+		return JSON.dump_ansi(object, 2)
 	}
 
 	static function setInJson(jsonString, key, value) {

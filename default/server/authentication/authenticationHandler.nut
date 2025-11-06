@@ -5,23 +5,28 @@ const BACKGROUND_INFAMOUS_HUNTER = "Infamous Hunter"
 
 addEventHandler("onPacket", function(pid, packet) {
 
+	print("got in here")
 
 	local packetContent = PacketReader.readPacket(packet)
 	// if the packet id doesn't match => stop code execution
 	if (packetContent.packetId != PacketId.CEF) {
+		print("no cef received")
 		return
 	}
 
 	if (packetContent.playerId != pid) {
+		print("playerid didnt match")
 		return
 	}
 
 	local message = packetContent.message
 
+	print("got in here")
 
 	if (("messageContext" in message) && message.messageContext == "setCharacterCreationMode") {
 		print("Setting character creation mode for playerId: " + packetContent.playerId)
 		setPlayerVirtualWorld(packetContent.playerId, packetContent.playerId + 2)
+		setPlayerVisual(packetContent.playerId, "Hum_Body_Naked0", 0, "Hum_Head_FatBald", 0)
 	} else if (("messageContext" in message) && message.messageContext == "setVisual") {
 		processSetVisual(packetContent.playerId, message);
 	} else if (("messageContext" in message) && message.messageContext == "switchToRegisterMode") {
