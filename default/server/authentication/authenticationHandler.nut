@@ -1,4 +1,7 @@
 local redisClient = RedisClientProvider.getClient()
+const BACKGROUND_ARENA_CHAMPION = "Arena Champion"
+const BACKGROUND_ARCANE_MAGE = "Arcane Mage"
+const BACKGROUND_INFAMOUS_HUNTER = "Infamous Hunter"
 
 addEventHandler("onPacket", function(pid, packet) {
 
@@ -16,10 +19,11 @@ addEventHandler("onPacket", function(pid, packet) {
 	local message = packetContent.message
 
 
-
-	if (("messageContext" in message) && message.messageContext == "setVisual") {
+	if (("messageContext" in message) && message.messageContext == "setCharacterCreationMode") {
+		print("Setting character creation mode for playerId: " + packetContent.playerId)
+		setPlayerVirtualWorld(packetContent.playerId, packetContent.playerId + 2)
+	} else if (("messageContext" in message) && message.messageContext == "setVisual") {
 		processSetVisual(packetContent.playerId, message);
-		return
 	} else if (("messageContext" in message) && message.messageContext == "switchToRegisterMode") {
 		PacketWriter.sendServerCommandPacket(pid, "register")
 	} else if (("messageContext" in message) && message.messageContext == "attemptLogin") {
@@ -33,7 +37,7 @@ addEventHandler("onPacket", function(pid, packet) {
 function getPlayerStatsByBackground(background) {
 	local stats = {}
 
-	if (background == "ARENA_CHAMPION") {
+	if (background == BACKGROUND_ARENA_CHAMPION) {
 		stats.health <- 1100
 		stats.mana <- 10
 		stats.str <- 100
@@ -43,7 +47,7 @@ function getPlayerStatsByBackground(background) {
 		stats.bow <- 10
 		stats.crossBow <- 10
 		stats.circle <- 0
-	} else if (background == "ARCANE_MAGE") {
+	} else if (background == BACKGROUND_ARCANE_MAGE) {
 		stats.health <- 700
 		stats.mana <- 200
 		stats.str <- 30
@@ -53,7 +57,7 @@ function getPlayerStatsByBackground(background) {
 		stats.bow <- 10
 		stats.crossBow <- 10
 		stats.circle <- 6
-	} else if (background == "INFAMOUS_HUNTER") {
+	} else if (background == BACKGROUND_INFAMOUS_HUNTER) {
 		stats.health <- 900
 		stats.mana <- 10
 		stats.str <- 50
@@ -80,7 +84,7 @@ function getPlayerStatsByBackground(background) {
 function getPlayerInventoryByBackground(background) {
 	local inventory = {}
 
-	if (background == "Arena Champion") {
+	if (background == BACKGROUND_ARENA_CHAMPION) {
 		inventory.meleeEquiped <- "ITMW_1H_FERROSSWORD_MIS"
 		inventory.armorEquiped <- "ITAR_SLD_H"
 		inventory.rangedEquiped <- ""
@@ -94,9 +98,9 @@ function getPlayerInventoryByBackground(background) {
 			}
 		]
 
-	} else if (background == "Arcane Mage") {
+	} else if (background == BACKGROUND_ARCANE_MAGE) {
 		inventory.meleeEquiped <- ""
-		inventory.armorEquiped <- "ITARITAR_KDW_L_ADDON_SLD_H"
+		inventory.armorEquiped <- "ITAR_KDW_L_ADDON"
 		inventory.rangedEquiped <- ""
 		inventory.other <- [{
 				itemInstance = "ITPO_HEALTH_ADDON_04",
@@ -107,7 +111,7 @@ function getPlayerInventoryByBackground(background) {
 				amount = 20
 			}
 		]
-	} else if (background == "Infamous Hunter") {
+	} else if (background == BACKGROUND_INFAMOUS_HUNTER) {
 		inventory.meleeEquiped <- "ITMW_1H_MIL_SWORD"
 		inventory.armorEquiped <- "ITAR_LEATHER_L"
 		inventory.rangedEquiped <- "ITRW_SLD_BOW"
@@ -138,9 +142,11 @@ function getPlayerInventoryByBackground(background) {
 }
 
 function loadPlayerData(playerId, username) {
+	print("Loading player data for username: " + username + " into playerId: " + playerId)
 	local playerData = PlayerRepository.getPlayerByName(redisClient, username)
 	local inventoryData = InventoryRepository.getInventoryByName(redisClient, username)
 
+	print("skills: " + playerData.oneHand)
 	setPlayerVisual(playerId, playerData.bodyModel, playerData.bodyTexture, playerData.headModel, playerData.headTexture)
 
 	setPlayerMaxHealth(playerId, playerData.health)
@@ -150,15 +156,20 @@ function loadPlayerData(playerId, username) {
 	setPlayerStrength(playerId, playerData.str)
 	setPlayerDexterity(playerId, playerData.dex)
 	setPlayerSkillWeapon(playerId, 0, playerData.oneHand)
-	setPlayerSkillWeapon(playerId, 0, playerData.twoHand)
-	setPlayerSkillWeapon(playerId, 0, playerData.bow)
-	setPlayerSkillWeapon(playerId, 0, playerData.crossBow)
+	setPlayerSkillWeapon(playerId, 1, playerData.twoHand)
+	setPlayerSkillWeapon(playerId, 2, playerData.bow)
+	setPlayerSkillWeapon(playerId, 3, playerData.crossBow)
 
 	setPlayerTalent(playerId, TALENT_MAGE, playerData.circle)
 
 	foreach(item in inventoryData.other) {
 		giveItem(playerId, item.itemInstance, item.amount)
 	}
+
+	print("melee: " + inventoryData.meleeEquiped)
+	giveItem(playerId, inventoryData.meleeEquiped, 1)
+	giveItem(playerId, inventoryData.armorEquiped, 1)
+	giveItem(playerId, inventoryData.rangedEquiped, 1)
 
 	equipItem(playerId, inventoryData.meleeEquiped)
 	equipItem(playerId, inventoryData.armorEquiped)
@@ -193,6 +204,7 @@ function processRegistrationAttempt(playerId, registrationPacket) {
 	local userData = PlayerRepository.getPlayerByName(redisClient, username)
 	if (userData == null) {
 		registerPlayer(playerId, registrationPacket)
+		setPlayerVirtualWorld(playerId, 0)
 		PacketWriter.sendServerCommandPacket(playerId, "registrationSuccess")
 	} else {
 		PacketWriter.sendServerCommandPacket(playerId, "registrationUserExists")
@@ -217,6 +229,7 @@ function handleLogin(playerId, username, passwordSha) {
 		print("Comparing passwordSha: " + passwordSha + " with stored passwordSha: " + userData.passwordSha)
 		if (userData.passwordSha == passwordSha) {
 			loadPlayerData(playerId, username)
+			setPlayerVirtualWorld(playerId, 0)
 			PacketWriter.sendServerCommandPacket(playerId, "loginSuccess")
 		} else {
 			PacketWriter.sendServerCommandPacket(playerId, "loginFailed")

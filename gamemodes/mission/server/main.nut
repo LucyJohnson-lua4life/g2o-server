@@ -1,7 +1,7 @@
 local function join_handler(pid) {
     sendMessageToAll(0, 255, 0, getPlayerName(pid) + " connected with the server.")
 
-	ClassFighter(pid)
+	//ClassFighter(pid)
 	spawnPlayer(pid)
 	setPlayerPosition(pid, 3062.53,853.732,8001.67)
 	setPlayerAngle(pid, 332.03)

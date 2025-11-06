@@ -44,14 +44,24 @@ addEventHandler("onPacket", function(packet) {
 
 	if (command == "setCharacterCreationMode") {
 		setCharacterCreationMode()
+		local message = { messageContext = "setCharacterCreationMode" }
+		PacketWriter.sendCefPacket(heroId, JsonUtils.toJson(message))
 	} else if (command == "loginSuccess") {
+		Camera.movementEnabled = true;
+		Camera.modeChangeEnabled = true;
+		setFreeze(false)
 		browser.call("runLoginSuccess")
 	} else if (command == "loginFailed") {
 		browser.call("runLoginFailed")
 	} else if (command == "registrationUserExists") {
 		browser.call("runRegistrationUserExists")
 	} else if (command == "registrationSuccess") {
+		Camera.movementEnabled = true;
+		Camera.modeChangeEnabled = true;
+		setFreeze(false)
 		browser.call("runRegistrationSuccess")
+
+
 	}
 
 })
