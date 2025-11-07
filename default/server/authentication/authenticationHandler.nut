@@ -11,9 +11,8 @@ addEventHandler("onPlayerDisconnect", function(pid, reason) {
 		local playername = ::PID_PLAYERNAME_MAP[pid]
 		print("about to playername: " + playername)
 		delete::PLAYERNAME_PID_MAP[playername]
+		delete::PID_PLAYERNAME_MAP[pid]
 	}
-	print("about to pid: " + pid)
-	delete::PID_PLAYERNAME_MAP[pid]
 
 })
 
