@@ -2,6 +2,9 @@ enum PacketId
 {
     MESSAGE,
     SERVER_COMMAND,
+    SERVER_POST,
+    CLIENT_COMMAND
+    CLIENT_POST,
     JSON,
     CEF
 }

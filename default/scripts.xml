@@ -8,6 +8,7 @@
 	<script src="client/net.nut" type="client" />
 	<script src="client/classselect.nut" type="client" />
 	<script src="client/cefClientHandler.nut" type="client" />
+	<script src="client/inventoryHandler.nut" type="client" />
     
 
 	<script src="server/acp.nut" type="server" />
@@ -16,5 +17,6 @@
 	<script src="server/repository/inventoryRepository.nut" type="server" />	
 	<script src="server/redisClientProvider.nut" type="server" />	
 	<script src="server/authentication/authenticationHandler.nut" type="server" />	
+	<script src="server/inventory/inventoryHandler.nut" type="server" />	
 	<import src="server/ai/ai.xml" />
 </server>

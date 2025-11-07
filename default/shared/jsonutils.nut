@@ -1,6 +1,6 @@
 class JsonUtils {
 	static function parse(jsonString) {
-		return JSON.parse_ansi(message)
+		return JSON.parse_ansi(jsonString)
 	}
 
 	static function toJson(object) {

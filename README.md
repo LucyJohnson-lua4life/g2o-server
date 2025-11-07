@@ -21,4 +21,8 @@ You need to generate this file by yourself, in order to do that:
 # TODO:
 * cleanup directory structure. root -> server or client, instead of having directories like gamemode etc.
 
+2 - melee
+4 - ranged
+16 - armor
+
 

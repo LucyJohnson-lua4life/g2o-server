@@ -1,7 +1,22 @@
+::PID_PLAYERNAME_MAP <- {};::PLAYERNAME_PID_MAP <- {};
+
 local redisClient = RedisClientProvider.getClient()
 const BACKGROUND_ARENA_CHAMPION = "Arena Champion"
 const BACKGROUND_ARCANE_MAGE = "Arcane Mage"
 const BACKGROUND_INFAMOUS_HUNTER = "Infamous Hunter"
+
+addEventHandler("onPlayerDisconnect", function(pid, reason) {
+
+	if ((pid in ::PID_PLAYERNAME_MAP)) {
+		local playername = ::PID_PLAYERNAME_MAP[pid]
+		print("about to playername: " + playername)
+		delete::PLAYERNAME_PID_MAP[playername]
+	}
+	print("about to pid: " + pid)
+	delete::PID_PLAYERNAME_MAP[pid]
+
+})
+
 
 addEventHandler("onPacket", function(pid, packet) {
 
@@ -90,58 +105,41 @@ function getPlayerInventoryByBackground(background) {
 	local inventory = {}
 
 	if (background == BACKGROUND_ARENA_CHAMPION) {
-		inventory.meleeEquiped <- "ITMW_1H_FERROSSWORD_MIS"
-		inventory.armorEquiped <- "ITAR_SLD_H"
-		inventory.rangedEquiped <- ""
-		inventory.other <- [{
-				itemInstance = "ITPO_HEALTH_ADDON_04",
-				amount = 20
-			},
-			{
-				itemInstance = "ITPO_MANA_ADDON_04",
-				amount = 20
-			}
-		]
+		inventory.melee <- "ITMW_1H_FERROSSWORD_MIS"
+		inventory.armor <- "ITAR_SLD_H"
+		inventory.ranged <- null
+		inventory.other <- {
+			"ITPO_HEALTH_ADDON_04": 20,
+			"ITPO_MANA_ADDON_04": 20
+		}
+
+
 
 	} else if (background == BACKGROUND_ARCANE_MAGE) {
-		inventory.meleeEquiped <- ""
-		inventory.armorEquiped <- "ITAR_KDW_L_ADDON"
-		inventory.rangedEquiped <- ""
-		inventory.other <- [{
-				itemInstance = "ITPO_HEALTH_ADDON_04",
-				amount = 20
-			},
-			{
-				itemInstance = "ITPO_MANA_ADDON_04",
-				amount = 20
-			}
-		]
+		inventory.melee <- null
+		inventory.armor <- "ITAR_KDW_L_ADDON"
+		inventory.ranged <- null
+		inventory.other <- {
+			"ITPO_HEALTH_ADDON_04": 20,
+			"ITPO_MANA_ADDON_04": 20
+		}
+
 	} else if (background == BACKGROUND_INFAMOUS_HUNTER) {
-		inventory.meleeEquiped <- "ITMW_1H_MIL_SWORD"
-		inventory.armorEquiped <- "ITAR_LEATHER_L"
-		inventory.rangedEquiped <- "ITRW_SLD_BOW"
-		inventory.other <- [{
-				itemInstance = "ITPO_HEALTH_ADDON_04",
-				amount = 20
-			},
-			{
-				itemInstance = "ITPO_MANA_ADDON_04",
-				amount = 20
-			}
-		]
+		inventory.melee <- "ITMW_1H_FERROSSWORD_MIS"
+		inventory.armor <- "ITAR_LEATHER_L"
+		inventory.ranged <- "ITRW_SLD_BOW"
+		inventory.other <- {
+			"ITPO_HEALTH_ADDON_04": 20,
+			"ITPO_MANA_ADDON_04": 20
+		}
 	} else {
-		inventory.meleeEquiped <- "ITMW_1H_FERROSSWORD_MIS"
-		inventory.armorEquiped <- "ITAR_SLD_H"
-		inventory.rangedEquiped <- ""
-		inventory.other <- [{
-				itemInstance = "ITPO_HEALTH_ADDON_04",
-				amount = 20
-			},
-			{
-				itemInstance = "ITPO_MANA_ADDON_04",
-				amount = 20
-			}
-		]
+		inventory.melee <- "ITMW_1H_FERROSSWORD_MIS"
+		inventory.armor <- "ITAR_SLD_H"
+		inventory.ranged <- null
+		inventory.other <- {
+			"ITPO_HEALTH_ADDON_04": 20,
+			"ITPO_MANA_ADDON_04": 20
+		}
 	}
 	return inventory
 }
@@ -151,7 +149,6 @@ function loadPlayerData(playerId, username) {
 	local playerData = PlayerRepository.getPlayerByName(redisClient, username)
 	local inventoryData = InventoryRepository.getInventoryByName(redisClient, username)
 
-	print("skills: " + playerData.oneHand)
 	setPlayerVisual(playerId, playerData.bodyModel, playerData.bodyTexture, playerData.headModel, playerData.headTexture)
 
 	setPlayerMaxHealth(playerId, playerData.health)
@@ -167,18 +164,26 @@ function loadPlayerData(playerId, username) {
 
 	setPlayerTalent(playerId, TALENT_MAGE, playerData.circle)
 
-	foreach(item in inventoryData.other) {
-		giveItem(playerId, item.itemInstance, item.amount)
+	foreach(itemInstance, amount in inventoryData.other) {
+		giveItem(playerId, itemInstance, amount)
 	}
 
-	print("melee: " + inventoryData.meleeEquiped)
-	giveItem(playerId, inventoryData.meleeEquiped, 1)
-	giveItem(playerId, inventoryData.armorEquiped, 1)
-	giveItem(playerId, inventoryData.rangedEquiped, 1)
+	//only for debug
+	giveItem(playerId, "ITMW_SCHWERT1",1)
 
-	equipItem(playerId, inventoryData.meleeEquiped)
-	equipItem(playerId, inventoryData.armorEquiped)
-	equipItem(playerId, inventoryData.rangedEquiped)
+	if (inventoryData.melee != null){
+        giveItem(playerId, inventoryData.melee, 1)
+		equipItem(playerId, inventoryData.melee)
+	}
+	if (inventoryData.armor != null){
+        giveItem(playerId, inventoryData.armor, 1)
+		equipItem(playerId, inventoryData.armor)
+	}
+	if (inventoryData.ranged != null){
+        giveItem(playerId, inventoryData.ranged, 1)
+		equipItem(playerId, inventoryData.ranged)
+	}
+
 }
 
 function registerPlayer(playerId, registrationPacket) {
@@ -211,6 +216,9 @@ function processRegistrationAttempt(playerId, registrationPacket) {
 		registerPlayer(playerId, registrationPacket)
 		setPlayerVirtualWorld(playerId, 0)
 		PacketWriter.sendServerCommandPacket(playerId, "registrationSuccess")
+		::PID_PLAYERNAME_MAP[playerId] <- username
+		::PLAYERNAME_PID_MAP[username] <- playerId
+		print("login playername: " + username + " with pid: " + playerId)
 	} else {
 		PacketWriter.sendServerCommandPacket(playerId, "registrationUserExists")
 	}
@@ -236,6 +244,9 @@ function handleLogin(playerId, username, passwordSha) {
 			loadPlayerData(playerId, username)
 			setPlayerVirtualWorld(playerId, 0)
 			PacketWriter.sendServerCommandPacket(playerId, "loginSuccess")
+			print("login playername: " + username + " with pid: " + playerId)
+			::PID_PLAYERNAME_MAP[playerId] <- username
+			::PLAYERNAME_PID_MAP[username] <- playerId
 		} else {
 			PacketWriter.sendServerCommandPacket(playerId, "loginFailed")
 		}
