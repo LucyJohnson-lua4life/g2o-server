@@ -439,7 +439,7 @@ addEventHandler("onCommand", function(cmd, param) {
 			addEffect(heroId, "spellFX_INCOVATION_BLUE")
 			break
 		case "speed":
-			setPlayerAniFpsRateMultiplier(heroId, "S_RUNL", 1.5)
+			setPlayerAniFpsRateMultiplier(heroId, "S_RUNL", 2)
 			break
 		case "slow":
 			setPlayerAniFpsRateMultiplier(heroId, "S_RUNL", 1)

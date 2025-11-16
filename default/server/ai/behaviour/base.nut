@@ -28,6 +28,7 @@ class AIBase {
         local state = this(npc_id)
         state.instance = instance
         state.Setup()
+        setPlayerRespawnTime(npc_id, 10000)
 
         return state
     }

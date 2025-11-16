@@ -447,7 +447,7 @@ local function init_handler() {
 	*/
 
 
-	//::TEST_STATE <- AI_SpawnNPC(AIOrcWarriorRoam.Create(), 750, 0, 0, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
+	::TEST_STATE <- AI_SpawnNPC(AIOrcWarriorRoam.Create(), 750, 0, 0, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 	//print("TEST_STATE: " + ::TEST_STATE.id)
 	//AI_SpawnNPC(AIWolf.Create(), 0, 0, 500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 
@@ -455,7 +455,7 @@ local function init_handler() {
 
 	local waypath = Way("NEWWORLD\\NEWWORLD.ZEN", "HAFEN", "NW_CITY_BED_HALVOR")
 	local waypoints = waypath.getWaypoints()
-	print("NUMBER: " + waypath.getCountWaypoints())
+
 	foreach(wpname in waypoints) {
 		print("Waypoint: " + wpname)
 	}
@@ -472,6 +472,25 @@ local function init_handler() {
 addEventHandler("onInit", init_handler)
 
 
+function retrieveItemInfo(item) {
+
+	return info
+}
+
+function testSpawn(playerId){
+	local npcData1 = AI_SpawnNPC(AISpellWisp.Create(), 300, 0, 0, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
+	local npcData2 = AI_SpawnNPC(AISpellWisp.Create(), 500, 0, 0, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
+
+	local post = {
+		wispId1 = npcData1.id,
+		wispId2 = npcData2.id
+	}
+	post.command <- "wispAttack"
+	PacketWriter.sendServerPostPacket(playerId, post)
+
+}
+
+
 addEventHandler("onPlayerCommand", function(id, cmd, param) {
 
 	switch (cmd) {
@@ -486,6 +505,10 @@ addEventHandler("onPlayerCommand", function(id, cmd, param) {
 		case "vvw":
 			print("switch to world 2")
 			setPlayerVirtualWorld(id, 2)
+			break
+		case "fte":
+			print("test wisp attack")
+			testSpawn(id)
 			break
 	}
 })

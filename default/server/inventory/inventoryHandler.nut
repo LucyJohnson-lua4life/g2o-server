@@ -43,7 +43,6 @@ inventory.meleeEquiped <- "ITMW_1H_FERROSSWORD_MIS"
 		inventory.rangedEquiped
 		*/
 function handleEquipEvent(playerId, itemInstance, inventoryKey) {
-	print("I'm equiping!")
 	if ((playerId in ::PID_PLAYERNAME_MAP)) {
 		local playerName = ::PID_PLAYERNAME_MAP[playerId]
 		local inventory = InventoryRepository.getInventoryByName(redisClient, playerName)
@@ -77,7 +76,6 @@ function handleEquipEvent(playerId, itemInstance, inventoryKey) {
 
 
 function handleUnequipEvent(playerId, itemInstance, inventoryKey) {
-	print("I'm UN equipping!")
 	if ((playerId in ::PID_PLAYERNAME_MAP)) {
 		local playerName = ::PID_PLAYERNAME_MAP[playerId]
 		local inventory = InventoryRepository.getInventoryByName(redisClient, playerName)
@@ -86,7 +84,6 @@ function handleUnequipEvent(playerId, itemInstance, inventoryKey) {
 
 			local oldItem = inventory[inventoryKey]
 			if(oldItem != itemInstance){
-				print("Error during unequip, unequal items unequiped " + oldItem + " <-> " + itemInstance)
 				return
 			}
 
@@ -140,22 +137,19 @@ function syncInventory(playerId, post) {
 
 addEventHandler("onPacket", function(pid, packet) {
 
-	print("check for client post")
-
 	//local contentOnArrival = InventoryRepository.getInventoryByName(redisClient, playerName)
 	local packetContent = PacketReader.readPacket(packet)
 	// if the packet id doesn't match => stop code execution
 	if (packetContent.packetId != PacketId.CLIENT_POST) {
 		return
 	}
-	print("check PID!")
+
 	if (packetContent.playerId != pid) {
 		return
 	}
 
 	local post = packetContent.post
 
-	print("got in here for inventory check")
 
 	if (("command" in post) && post.command == "incrementInventory") {
 		incrementInventory(pid, post.itemInstance)

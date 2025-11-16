@@ -9,7 +9,6 @@ addEventHandler("onPlayerDisconnect", function(pid, reason) {
 
 	if ((pid in ::PID_PLAYERNAME_MAP)) {
 		local playername = ::PID_PLAYERNAME_MAP[pid]
-		print("about to playername: " + playername)
 		delete::PLAYERNAME_PID_MAP[playername]
 		delete::PID_PLAYERNAME_MAP[pid]
 	}
@@ -19,26 +18,21 @@ addEventHandler("onPlayerDisconnect", function(pid, reason) {
 
 addEventHandler("onPacket", function(pid, packet) {
 
-	print("got in here")
 
 	local packetContent = PacketReader.readPacket(packet)
 	// if the packet id doesn't match => stop code execution
 	if (packetContent.packetId != PacketId.CEF) {
-		print("no cef received")
 		return
 	}
 
 	if (packetContent.playerId != pid) {
-		print("playerid didnt match")
 		return
 	}
 
 	local message = packetContent.message
 
-	print("got in here")
 
 	if (("messageContext" in message) && message.messageContext == "setCharacterCreationMode") {
-		print("Setting character creation mode for playerId: " + packetContent.playerId)
 		setPlayerVirtualWorld(packetContent.playerId, packetContent.playerId + 2)
 		setPlayerVisual(packetContent.playerId, "Hum_Body_Naked0", 0, "Hum_Head_FatBald", 0)
 	} else if (("messageContext" in message) && message.messageContext == "setVisual") {
@@ -144,7 +138,6 @@ function getPlayerInventoryByBackground(background) {
 }
 
 function loadPlayerData(playerId, username) {
-	print("Loading player data for username: " + username + " into playerId: " + playerId)
 	local playerData = PlayerRepository.getPlayerByName(redisClient, username)
 	local inventoryData = InventoryRepository.getInventoryByName(redisClient, username)
 
@@ -199,7 +192,6 @@ function registerPlayer(playerId, registrationPacket) {
 
 	inventory.name <- registrationPacket.username
 
-	print("Registering player: " + stats.name)
 	PlayerRepository.setPlayer(redisClient, stats.name, stats)
 	InventoryRepository.setInventoryByName(redisClient, stats.name, inventory)
 	loadPlayerData(playerId, stats.name)
@@ -209,7 +201,6 @@ function processRegistrationAttempt(playerId, registrationPacket) {
 	local username = registrationPacket.username
 	local passwordSha = registrationPacket.passwordSha
 
-	print("Processing registration attempt for username: " + username)
 	local userData = PlayerRepository.getPlayerByName(redisClient, username)
 	if (userData == null) {
 		registerPlayer(playerId, registrationPacket)
@@ -217,7 +208,6 @@ function processRegistrationAttempt(playerId, registrationPacket) {
 		PacketWriter.sendServerCommandPacket(playerId, "registrationSuccess")
 		::PID_PLAYERNAME_MAP[playerId] <- username
 		::PLAYERNAME_PID_MAP[username] <- playerId
-		print("login playername: " + username + " with pid: " + playerId)
 	} else {
 		PacketWriter.sendServerCommandPacket(playerId, "registrationUserExists")
 	}
@@ -233,7 +223,6 @@ function processLoginAttempt(playerId, loginPacket) {
 function handleLogin(playerId, username, passwordSha) {
 
 	local userData = PlayerRepository.getPlayerByName(redisClient, username)
-	print("User data loaded for username: " + username + " is null: " + (userData == null))
 	if (userData == null) {
 		PacketWriter.sendServerCommandPacket(playerId, "loginFailed")
 	} else {
@@ -243,7 +232,6 @@ function handleLogin(playerId, username, passwordSha) {
 			loadPlayerData(playerId, username)
 			setPlayerVirtualWorld(playerId, 0)
 			PacketWriter.sendServerCommandPacket(playerId, "loginSuccess")
-			print("login playername: " + username + " with pid: " + playerId)
 			::PID_PLAYERNAME_MAP[playerId] <- username
 			::PLAYERNAME_PID_MAP[username] <- playerId
 		} else {

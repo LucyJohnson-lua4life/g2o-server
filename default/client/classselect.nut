@@ -56,10 +56,17 @@ function closeClassSelect() {
 	setFreeze(false)
 }
 
+
+function attackWithFireball(focus){
+Chat.print(0, 255, 0, "startFireBall")
+	attackPlayerWithEffect(heroId, 32, DAMAGE_FIRE, 1, true, 1, "spellFX_InstantFireball")
+}
+
 function testAttack(){
   local focus = getFocusNpc()
   Chat.print(0, 255, 0, "focus: " + focus)
-  attackPlayerWithEffect(heroId, focus, DAMAGE_FIRE, 200, true, 1, "spellFX_InstantFireball")
+  setTimer(attackWithFireball, 2000, 5, focus)
+
 }
 
 function getPosition(){

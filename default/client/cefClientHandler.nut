@@ -69,6 +69,44 @@ addEventHandler("onPacket", function(packet) {
 
 })
 
+function attackWithFireball(attackerId){
+Chat.print(0, 255, 0, "startFireBall")
+	attackPlayerWithEffect(attackerId, 32, DAMAGE_FIRE, 1, true, 1, "spellFX_InstantFireball")
+}
+
+function testAttack(attackerId){
+  setTimer(attackWithFireball, 1500, 5,attackerId)
+
+}
+
+//TODO: please remove
+addEventHandler("onPacket", function(packet) {
+	// read unique packet id
+	Chat.print(0, 255, 0, "Received server command!!!")
+	local packetContent = PacketReader.readPacket(packet)
+Chat.print(0, 255, 0, "allguchi")
+	// if the packet id doesn't match => stop code execution
+	if (packetContent.packetId != PacketId.SERVER_POST) {
+		return
+	}
+	if (packetContent.playerId != heroId) {
+		return
+	}
+Chat.print(0, 255, 0, "gotin here")
+
+	// read message
+	local post = packetContent.post
+	// IMPORTANT: SET character creation Mode only for the heroId that is determined by the server!!!!
+
+	//Chat.print(0, 255, 0, "Received server command: " + post + " for playerId: " + packetContent.playerId)
+
+	if (post.command == "wispAttack") {
+		testAttack(post.wispId1)
+		testAttack(post.wispId2)
+	}
+
+})
+
 function clientDebugPrint(message) {
 	Chat.print(0, 255, 0, message)
 }

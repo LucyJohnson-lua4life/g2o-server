@@ -116,14 +116,13 @@ function refreshPosition(npc_state) {
 
 function moveByGoto(npc_state, target_waypoint) {
 	local flags = npc_state.flags
-	print("in moveByGoto")
+
 	if (!("last_pos_update" in flags) || flags.last_pos_update == null || flags.last_pos_update == 0) {
 		local current_pos = getPlayerPosition(npc_state.id)
 		flags.current_pos_x <- current_pos.x
 		flags.current_pos_y <- current_pos.y
 		flags.current_pos_z <- current_pos.z
 		refreshPosition(npc_state)
-		print("refresh")
 	} else if (flags.last_pos_update + 500 < getTickCount()) {
 		local current_pos = getPlayerPosition(npc_state.id)
 		local distance_moved = getDistance3d(flags.current_pos_x, flags.current_pos_y, flags.current_pos_z, flags.last_pos_x, flags.last_pos_y, flags.last_pos_z)
@@ -131,7 +130,6 @@ function moveByGoto(npc_state, target_waypoint) {
 			flags.current_pos_x <- current_pos.x
 			flags.current_pos_y <- current_pos.y
 			flags.current_pos_z <- current_pos.z
-			print("update current pos")
 		} else if (distance_moved < 2) {
 
 			local time_diff = getTickCount() - flags.last_pos_update
@@ -142,7 +140,6 @@ function moveByGoto(npc_state, target_waypoint) {
 				flags.current_pos_y = target_waypoint.y
 				flags.current_pos_z = target_waypoint.z
 
-				print("move npc")
 				setPlayerPosition(npc_state.id, target_waypoint.x, target_waypoint.y, target_waypoint.z);
 			} else {
 				local dir_x = target_waypoint.x - flags.current_pos_x
@@ -159,7 +156,6 @@ function moveByGoto(npc_state, target_waypoint) {
 				flags.current_pos_z = flags.current_pos_z + (dir_z * speed)
 
 				setPlayerPosition(npc_state.id, target_waypoint.x, target_waypoint.y, target_waypoint.z);
-				print("move npc2")
 
 			}
 
@@ -175,7 +171,6 @@ function AI_Goto(npc_state, target_position_name) {
 	local world = npc_state.spawn.world
 
 	if (!("goto_is_active" in flags)) {
-		print("Set goto for npc " + npc_state.id + " to " + target_position_name)
 		local pos = getPlayerPosition(npc_state.id)
 		local nearest_wp = getNearestWaypoint(world, 0, 0, 0)
 		local wp = getWaypoint(world, target_position_name)

@@ -30,4 +30,5 @@
 	<script src="npc/warg.nut" type="server" />
 	<script src="npc/wolf.nut" type="server" />
 	<script src="npc/zombie.nut" type="server" />
+	<script src="npc/spellWisp.nut" type="server" />
 </server>

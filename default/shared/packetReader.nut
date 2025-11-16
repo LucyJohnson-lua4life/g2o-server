@@ -22,6 +22,16 @@ class PacketReader {
 			post = JsonUtils.parse(post)
 		}
 	}
+	function readServerPost(packetId, packet) {
+		local playerId = packet.readUInt16()
+		local post = packet.readString()
+
+		return {
+			packetId = packetId,
+			playerId = playerId,
+			post = JsonUtils.parse(post)
+		}
+	}
 
 	function readServerCommand(packetId, packet) {
 		local playerId = packet.readUInt16()
@@ -57,6 +67,9 @@ class PacketReader {
 			return readClientPost(packetId, packet)
 		}else if (packetId == PacketId.CLIENT_COMMAND) {
 			return readClientCommand(packetId, packet)
+	    }
+		else if (packetId == PacketId.SERVER_POST) {
+			return readServerPost(packetId, packet)
 	    }
 	}
 }
