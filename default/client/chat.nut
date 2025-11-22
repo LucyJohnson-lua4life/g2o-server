@@ -447,6 +447,9 @@ addEventHandler("onCommand", function(cmd, param) {
 		case "speedo":
 			setPlayerAniFpsRateMultiplier(heroId, "S_RUNL", 5)
 			break
+		case "sight":
+			setSightFactor(5)
+			break
 
 	}
 
