@@ -148,26 +148,27 @@ addEventHandler("onPacket", function(pid, packet) {
 		return
 	}
 
+	local postCommand = packetContent.postCommand
 	local post = packetContent.post
 
 
-	if (("command" in post) && post.command == "incrementInventory") {
+	if (postCommand == "incrementInventory") {
 		incrementInventory(pid, post.itemInstance)
-	} else if (("command" in post) && post.command == "decrementInventory") {
+	} else if (postCommand == "decrementInventory") {
 		decrementInventory(pid, post.itemInstance)
-	}else if (("command" in post) && post.command == "equipMelee") {
+	}else if (postCommand == "equipMelee") {
 		handleEquipEvent(pid, post.itemInstance, "melee")
-	}else if (("command" in post) && post.command == "equipRanged") {
+	}else if (postCommand == "equipRanged") {
 		handleEquipEvent(pid, post.itemInstance, "ranged")
-	}else if (("command" in post) && post.command == "equipArmor") {
+	}else if (postCommand == "equipArmor") {
 		handleEquipEvent(pid, post.itemInstance, "armor")
-	}else if (("command" in post) && post.command == "unequipMelee") {
+	}else if (postCommand == "unequipMelee") {
 		handleUnequipEvent(pid, post.itemInstance, "melee")
 	}
-	else if (("command" in post) && post.command == "unequipRanged") {
+	else if (postCommand == "unequipRanged") {
 		handleUnequipEvent(pid, post.itemInstance, "ranged")
 	}
-	else if (("command" in post) && post.command == "unequipArmor") {
+	else if (postCommand == "unequipArmor") {
 		handleUnequipEvent(pid, post.itemInstance, "armor")
 	}
 

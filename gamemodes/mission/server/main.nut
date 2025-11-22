@@ -6,7 +6,7 @@ local function join_handler(pid) {
 	setPlayerPosition(pid, 3062.53,853.732,8001.67)
 	setPlayerAngle(pid, 332.03)
 
-	PacketWriter.sendServerCommandPacket(pid, "setCharacterCreationMode")
+	PacketWriter.sendServerPostPacket(pid, "setCharacterCreationMode", {})
 }
 
 addEventHandler("onPlayerJoin", join_handler)

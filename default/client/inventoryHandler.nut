@@ -8,16 +8,14 @@ function retrieveItemInfo(item) {
 
 addEventHandler("onDropItem", function(item) {
 	local post = retrieveItemInfo(item)
-	post.command <- "decrementInventory"
-	PacketWriter.sendClientPostPacket(heroId, post)
+	PacketWriter.sendClientPostPacket(heroId, "decrementInventory", post)
 })
 
 
 
 function sendItemPost(item, command) {
 	local post = retrieveItemInfo(item)
-	post.command <- command
-	PacketWriter.sendClientPostPacket(heroId, post)
+	PacketWriter.sendClientPostPacket(heroId, command, post)
 }
 
 addEventHandler("onUnequip", function(item) {
@@ -42,8 +40,7 @@ addEventHandler("onEquip", function(item) {
 
 addEventHandler("onTakeItem", function(item, synchronized) {
 	local post = retrieveItemInfo(item)
-	post.command <- "incrementInventory"
-	PacketWriter.sendClientPostPacket(heroId, post)
+	PacketWriter.sendClientPostPacket(heroId, "incrementInventory" ,post)
 })
 
 addEventHandler("onPlayerUseItem", function(id, item, from, to) {
@@ -52,8 +49,7 @@ addEventHandler("onPlayerUseItem", function(id, item, from, to) {
 	if (to == 0) {
 		Chat.print(0,255,0, "t2")
 		local post = retrieveItemInfo(item)
-		post.command <- "decrementInventory"
-		PacketWriter.sendClientPostPacket(heroId, post)
+		PacketWriter.sendClientPostPacket(heroId, "decrementInventory", post)
 	}
 
 })

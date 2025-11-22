@@ -18,7 +18,6 @@ addEventHandler("onPlayerDisconnect", function(pid, reason) {
 
 addEventHandler("onPacket", function(pid, packet) {
 
-
 	local packetContent = PacketReader.readPacket(packet)
 	// if the packet id doesn't match => stop code execution
 	if (packetContent.packetId != PacketId.CEF) {
@@ -31,14 +30,13 @@ addEventHandler("onPacket", function(pid, packet) {
 
 	local message = packetContent.message
 
-
 	if (("messageContext" in message) && message.messageContext == "setCharacterCreationMode") {
 		setPlayerVirtualWorld(packetContent.playerId, packetContent.playerId + 2)
 		setPlayerVisual(packetContent.playerId, "Hum_Body_Naked0", 0, "Hum_Head_FatBald", 0)
 	} else if (("messageContext" in message) && message.messageContext == "setVisual") {
 		processSetVisual(packetContent.playerId, message);
 	} else if (("messageContext" in message) && message.messageContext == "switchToRegisterMode") {
-		PacketWriter.sendServerCommandPacket(pid, "register")
+		PacketWriter.sendServerPostPacket(pid, "register", {})
 	} else if (("messageContext" in message) && message.messageContext == "attemptLogin") {
 		processLoginAttempt(pid, message);
 	} else if (("messageContext" in message) && message.messageContext == "attemptRegistration") {
@@ -105,8 +103,6 @@ function getPlayerInventoryByBackground(background) {
 			"ITPO_HEALTH_ADDON_04": 20,
 			"ITPO_MANA_ADDON_04": 20
 		}
-
-
 
 	} else if (background == BACKGROUND_ARCANE_MAGE) {
 		inventory.melee <- null
@@ -205,11 +201,11 @@ function processRegistrationAttempt(playerId, registrationPacket) {
 	if (userData == null) {
 		registerPlayer(playerId, registrationPacket)
 		setPlayerVirtualWorld(playerId, 0)
-		PacketWriter.sendServerCommandPacket(playerId, "registrationSuccess")
+		PacketWriter.sendServerPostPacket(playerId, "registrationSuccess", {})
 		::PID_PLAYERNAME_MAP[playerId] <- username
 		::PLAYERNAME_PID_MAP[username] <- playerId
 	} else {
-		PacketWriter.sendServerCommandPacket(playerId, "registrationUserExists")
+		PacketWriter.sendServerPostPacket(playerId, "registrationUserExists", {})
 	}
 }
 
@@ -224,18 +220,16 @@ function handleLogin(playerId, username, passwordSha) {
 
 	local userData = PlayerRepository.getPlayerByName(redisClient, username)
 	if (userData == null) {
-		PacketWriter.sendServerCommandPacket(playerId, "loginFailed")
+		PacketWriter.sendServerPostPacket(playerId, "loginFailed", {})
 	} else {
-
-		print("Comparing passwordSha: " + passwordSha + " with stored passwordSha: " + userData.passwordSha)
 		if (userData.passwordSha == passwordSha) {
 			loadPlayerData(playerId, username)
 			setPlayerVirtualWorld(playerId, 0)
-			PacketWriter.sendServerCommandPacket(playerId, "loginSuccess")
+			PacketWriter.sendServerPostPacket(playerId, "loginSuccess", {})
 			::PID_PLAYERNAME_MAP[playerId] <- username
 			::PLAYERNAME_PID_MAP[username] <- playerId
 		} else {
-			PacketWriter.sendServerCommandPacket(playerId, "loginFailed")
+			PacketWriter.sendServerPostPacket(playerId, "loginFailed", {})
 		}
 	}
 }
