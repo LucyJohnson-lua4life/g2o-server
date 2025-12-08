@@ -135,7 +135,16 @@ function getPlayerInventoryByBackground(background) {
 
 function loadPlayerData(playerId, username) {
 	local playerData = PlayerRepository.getPlayerByName(redisClient, username)
-	local inventoryData = InventoryRepository.getInventoryByName(redisClient, username)
+
+
+	print("Loading data for player: " + username)
+
+	local inventory = redisClient.hgetallFlat("inventory:" + username)
+
+	local meleeName = redisClient.hget("equipped:" + username, "melee")
+	local rangedName = redisClient.hget("equipped:" + username, "ranged")
+	local armorName = redisClient.hget("equipped:" + username, "armor")
+
 
 	setPlayerVisual(playerId, playerData.bodyModel, playerData.bodyTexture, playerData.headModel, playerData.headTexture)
 
@@ -152,24 +161,30 @@ function loadPlayerData(playerId, username) {
 
 	setPlayerTalent(playerId, TALENT_MAGE, playerData.circle)
 
-	foreach(itemInstance, amount in inventoryData.other) {
-		giveItem(playerId, itemInstance, amount)
+	if(inventory != null) {
+		foreach(itemInstance, amount in inventory) {
+			print("itemInstance: " + itemInstance + " amount: " + amount)
+			giveItem(playerId, itemInstance, amount.tointeger())
+			print("Giving itemSST " + itemInstance + " x" + amount + " to " + username)
+		}
+	}else {
+		print("No inventory found for player: " + username)
 	}
 
 	//only for debug
 	giveItem(playerId, "ITMW_SCHWERT1",1)
 
-	if (inventoryData.melee != null){
-        giveItem(playerId, inventoryData.melee, 1)
-		equipItem(playerId, inventoryData.melee)
+	if (meleeName != ""){
+        giveItem(playerId, meleeName, 1)
+		equipItem(playerId, meleeName)
 	}
-	if (inventoryData.armor != null){
-        giveItem(playerId, inventoryData.armor, 1)
-		equipItem(playerId, inventoryData.armor)
+	if (armorName != ""){
+        giveItem(playerId, armorName, 1)
+		equipItem(playerId, armorName)
 	}
-	if (inventoryData.ranged != null){
-        giveItem(playerId, inventoryData.ranged, 1)
-		equipItem(playerId, inventoryData.ranged)
+	if (rangedName != ""){
+        giveItem(playerId, rangedName, 1)
+		equipItem(playerId, rangedName)
 	}
 
 }
@@ -189,7 +204,15 @@ function registerPlayer(playerId, registrationPacket) {
 	inventory.name <- registrationPacket.username
 
 	PlayerRepository.setPlayer(redisClient, stats.name, stats)
-	InventoryRepository.setInventoryByName(redisClient, stats.name, inventory)
+
+	foreach(itemInstance, amount in inventory.other) {
+		redisClient.hset("inventory:" + inventory.name, itemInstance, amount)
+		print("Giving item " + itemInstance + " x" + amount + " to " + inventory.name)
+	}
+	redisClient.hset("equipped:" + inventory.name, "melee", inventory.melee)
+	redisClient.hset("equipped:" + inventory.name, "ranged", inventory.ranged)
+	redisClient.hset("equipped:" + inventory.name, "armor", inventory.armor)
+
 	loadPlayerData(playerId, stats.name)
 }
 

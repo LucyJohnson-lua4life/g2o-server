@@ -1,3 +1,4 @@
+local redisClient = RedisClientProvider.getClient()
 local function join_handler(pid) {
     sendMessageToAll(0, 255, 0, getPlayerName(pid) + " connected with the server.")
 
@@ -64,6 +65,18 @@ local function init_handler() {
 
 	print("jsontest: " + age);
 	*/
+	print(redisClient.hget("inventory:q111111", "ITPO_MANA_ADDON_04"))
+	print("empty to integer: " + "1".tointeger())
+	local res = redisClient.hgetallFlat("inventory:q11111")
+	foreach(key, value in res) {
+		print("key: " + key + " value: " + value)
+
+
+	}
+
+
+
+
 }
 
 addEventHandler("onInit", init_handler)

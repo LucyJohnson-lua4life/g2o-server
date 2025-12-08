@@ -11,8 +11,6 @@ addEventHandler("onDropItem", function(item) {
 	PacketWriter.sendClientPostPacket(heroId, "decrementInventory", post)
 })
 
-
-
 function sendItemPost(item, command) {
 	local post = retrieveItemInfo(item)
 	PacketWriter.sendClientPostPacket(heroId, command, post)
