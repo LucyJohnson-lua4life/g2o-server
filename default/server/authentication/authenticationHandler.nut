@@ -209,9 +209,9 @@ function registerPlayer(playerId, registrationPacket) {
 		InventoryRepository.setItemByName(redisClient, inventory.name, itemInstance, amount)
 	}
 
-	InventoryRepsitory.setEquippedByName(redisClient, inventory.name, "melee", inventory.melee)
-	InventoryRepsitory.setEquippedByName(redisClient, inventory.name, "melee", inventory.ranged)
-	InventoryRepsitory.setEquippedByName(redisClient, inventory.name, "melee", inventory.armor)
+	InventoryRepository.setEquippedByName(redisClient, inventory.name, "melee", inventory.melee)
+	InventoryRepository.setEquippedByName(redisClient, inventory.name, "ranged", inventory.ranged)
+	InventoryRepository.setEquippedByName(redisClient, inventory.name, "armor", inventory.armor)
 
 	loadPlayerData(playerId, stats.name)
 }
