@@ -1,3 +1,4 @@
+//TODO: replace player repository with hash maps for better performance
 class PlayerRepository {
 
 	static function setPlayer(client, name, playerData) {

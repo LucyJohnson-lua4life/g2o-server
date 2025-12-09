@@ -139,7 +139,7 @@ function loadPlayerData(playerId, username) {
 
 	print("Loading data for player: " + username)
 
-	local inventory = redisClient.hgetallFlat("inventory:" + username)
+	local inventory = InventoryRepository.getAllItemsByName(redisClient, username)
 
 	local meleeName = redisClient.hget("equipped:" + username, "melee")
 	local rangedName = redisClient.hget("equipped:" + username, "ranged")
@@ -206,12 +206,12 @@ function registerPlayer(playerId, registrationPacket) {
 	PlayerRepository.setPlayer(redisClient, stats.name, stats)
 
 	foreach(itemInstance, amount in inventory.other) {
-		redisClient.hset("inventory:" + inventory.name, itemInstance, amount)
-		print("Giving item " + itemInstance + " x" + amount + " to " + inventory.name)
+		InventoryRepository.setItemByName(redisClient, inventory.name, itemInstance, amount)
 	}
-	redisClient.hset("equipped:" + inventory.name, "melee", inventory.melee)
-	redisClient.hset("equipped:" + inventory.name, "ranged", inventory.ranged)
-	redisClient.hset("equipped:" + inventory.name, "armor", inventory.armor)
+
+	InventoryRepsitory.setEquippedByName(redisClient, inventory.name, "melee", inventory.melee)
+	InventoryRepsitory.setEquippedByName(redisClient, inventory.name, "melee", inventory.ranged)
+	InventoryRepsitory.setEquippedByName(redisClient, inventory.name, "melee", inventory.armor)
 
 	loadPlayerData(playerId, stats.name)
 }

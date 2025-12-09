@@ -5,13 +5,13 @@ function incrementInventory(playerId, itemInstance) {
 	if ((playerId in ::PID_PLAYERNAME_MAP)) {
 		local playerName = ::PID_PLAYERNAME_MAP[playerId]
 
-		local amount = redisClient.hget("inventory:" + playerName, itemInstance)
+		local amount = InventoryRepository.getItemAmountByName(redisClient, playerName, itemInstance)
 		amount = amount == "" ? 0 : amount.tointeger()
 
 		if (amount != 0) {
-			redisClient.hset("inventory:" + playerName, itemInstance, amount + 1)
+			InventoryRepository.setItemByName(redisClient, playerName, itemInstance, amount + 1)
 		} else {
-			redisClient.hset("inventory:" + playerName, itemInstance, 1)
+			InventoryRepository.setItemByName(redisClient, playerName, itemInstance, 1)
 		}
 
 
@@ -23,13 +23,13 @@ function decrementInventory(playerId, itemInstance) {
 	if ((playerId in ::PID_PLAYERNAME_MAP)) {
 		local playerName = ::PID_PLAYERNAME_MAP[playerId]
 
-		local amount = redisClient.hget("inventory:" + playerName, itemInstance)
+		local amount = InventoryRepository.getItemAmountByName(redisClient, playerName, itemInstance)
 		amount = amount == "" ? 0 : amount.tointeger()
 
 		if (amount > 1) {
-			redisClient.hset("inventory:" + playerName, itemInstance, amount - 1)
+			InventoryRepository.setItemByName(redisClient, playerName, itemInstance, amount - 1)
 		} else {
-			redisClient.hdel("inventory:" + playerName, itemInstance)
+			InventoryRepository.deleteItemByName(redisClient, playerName, itemInstance)
 		}
 
 	}
@@ -39,25 +39,25 @@ function handleEquipEvent(playerId, itemInstance, equipmentType) {
 	if ((playerId in ::PID_PLAYERNAME_MAP)) {
 		local playerName = ::PID_PLAYERNAME_MAP[playerId]
 
-		local amount = redisClient.hget("inventory:" + playerName, itemInstance)
+		local amount = InventoryRepository.getItemAmountByName(redisClient, playerName, itemInstance)
 		amount = amount == "" ? 0 : amount.tointeger()
-		local oldItem = redisClient.hget("equipped:" + playerName, equipmentType)
-		local oldItemAmount = redisClient.hget("inventory:" + playerName, oldItem)
+		local oldItem = InventoryRepository.getEquippedByType(redisClient, playerName, equipmentType)
+		local oldItemAmount = InventoryRepository.getItemAmountByName(redisClient, playerName, oldItem)
 		oldItemAmount = oldItemAmount == "" ? 0 : oldItemAmount
 
 		if (oldItemAmount != 0) {
-			redisClient.hset("inventory:" + playerName, oldItem, oldItemAmount + 1)
+			InventoryRepository.setItemByName(redisClient, playerName, oldItem, oldItemAmount + 1)
 		} else if (oldItemAmount == 0) {
-			redisClient.hset("inventory:" + playerName, oldItem, 1)
+			InventoryRepository.setItemByName(redisClient, playerName, oldItem, 1)
 		}
 
 		if (amount > 1) {
-			redisClient.hset("inventory:" + playerName, itemInstance, amount - 1)
+			InventoryRepository.setItemByName(redisClient, playerName, itemInstance, amount - 1)
 		} else {
-			redisClient.hdel("inventory:" + playerName, itemInstance)
+			InventoryRepository.deleteItemByName(redisClient, playerName, itemInstance)
 		}
 
-		redisClient.hset("equipped:" + playerName, equipmentType, itemInstance)
+		InventoryRepository.setEquippedByName(redisClient, playerName, equipmentType, itemInstance)
 	}
 }
 
@@ -66,24 +66,23 @@ function handleUnequipEvent(playerId, itemInstance, equipmentType) {
 	if ((playerId in ::PID_PLAYERNAME_MAP)) {
 		local playerName = ::PID_PLAYERNAME_MAP[playerId]
 
-
-		local amount = redisClient.hget("inventory:" + playerName, itemInstance)
+		local amount = InventoryRepository.getItemAmountByName(redisClient, playerName, itemInstance)
 		amount = amount == "" ? 0 : amount.tointeger()
-		local oldItem = redisClient.hget("equipped:" + playerName, equipmentType)
-		local oldItemAmount = redisClient.hget("inventory:" + playerName, oldItem)
+		local oldItem = InventoryRepository.getEquippedByType(redisClient, playerName, equipmentType)
+		local oldItemAmount = InventoryRepository.getItemAmountByName(redisClient, playerName, oldItem)
 		oldItemAmount = oldItemAmount == "" ? 0 : oldItemAmount
 
 
 		if (oldItem != itemInstance) {
 			return
-		}else {
-			redisClient.hdel("equipped:" + playerName, equipmentType)
+		} else {
+			InventoryRepository.deleteEquippedByType(redisClient, playerName, equipmentType)
 		}
 
 		if (amount != 0) {
-			redisClient.hset("inventory:" + playerName, itemInstance, amount + 1)
+			InventoryRepository.setItemByName(redisClient, playerName, itemInstance, amount + 1)
 		} else {
-			redisClient.hset("inventory:" + playerName, itemInstance, 1)
+			InventoryRepository.setItemByName(redisClient, playerName, itemInstance, 1)
 		}
 	}
 }

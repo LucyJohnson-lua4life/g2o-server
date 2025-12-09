@@ -1,24 +1,30 @@
+//TODO: refactor inventory repository api
 class InventoryRepository {
 
-	static function setInventoryByName(client, name, inventoryData) {
-		local json = JSON.dump_ansi(inventoryData, 2)
-		client.set("inventory:" + name, json)
+	static function setItemByName(client, name, item, amount) {
+		return client.hset("inventory:" + name, item, amount)
 	}
 
-	static function getInventoryByName(client, name) {
-		local playerDataJson = client.get("inventory:" + name)
-		if (playerDataJson == "") {
-			return null
-		}
-		return JSON.parse_ansi(playerDataJson)
+	static function getItemAmountByName(client, name, item) {
+		return client.hget("inventory:" + name, item)
 	}
 
-	static function getInventoryJson(client, name) {
-		local playerDataJson = client.get("inventory:" + name)
-		if (playerDataJson == "") {
-			return null
-		}
-		return playerDataJson
+	static function getAllItemsByName(client, name) {
+		return client.hgetallFlat("inventory:" + name)
+	}
+	static function deleteItemByName(client, name, item) {
+		return client.hdel("inventory:" + name, item)
 	}
 
+	static function setEquippedByName(client, name, equipmentType, item) {
+		return client.hset("equipped:" + name, equipmentType, item)
+	}
+
+	static function getEquippedByType(client, name, equipmentType) {
+		return client.hget("equipped:" + name, equipmentType)
+	}
+
+	static function deleteEquippedByType(client, name, equipmentType) {
+		return client.hdel("equipped:" + name, equipmentType)
+	}
 }
