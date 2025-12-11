@@ -87,6 +87,10 @@ class AIOrcMelee extends AIAgressive {
 	}
 
 	function AttackRoutine(ts) {
+		if(isPlayerConnected(this.enemy_id) == false) {
+			this.enemy_id = -1
+			return
+		}		
 		AI_TurnToPlayer(this.id, this.enemy_id)
 		if ((this.wait_until - ts) > 0 || AI_WaitForAction(this.id, this.wait_for_action_id)) {
 			return

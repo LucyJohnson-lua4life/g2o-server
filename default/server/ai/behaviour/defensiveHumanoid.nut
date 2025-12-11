@@ -11,7 +11,7 @@ local function get_wm_name(wm) {
     return ""
 }
 
-class AIHumanoid extends AIAgressive {
+class AIDefensiveHumanoid extends AIDefensive {
     function AttackMove(ts) {
         if (this.weapon_mode >= WEAPONMODE_1HS && this.weapon_mode <= WEAPONMODE_2HS) {
             npcAttackMelee(this.id, this.enemy_id, random(ATTACK_FORWARD, ATTACK_RIGHT), -1, true)
@@ -75,7 +75,7 @@ class AIHumanoid extends AIAgressive {
 		if(isPlayerConnected(this.enemy_id) == false) {
 			this.enemy_id = -1
 			return
-		}        
+		}
         AI_TurnToPlayer(this.id, this.enemy_id)
         if ((this.wait_until - ts) > 0 || AI_WaitForAction(this.id, this.wait_for_action_id)) {
             return
@@ -108,6 +108,10 @@ class AIHumanoid extends AIAgressive {
     }
 
     function OnHitReceived(kid, desc) {
+		if(this.enemy_id == -1 || !isPlayerConnected(this.enemy_id)) {
+			this.enemy_id = kid
+		}
+
         local change_action = rand() % 100
         if (change_action > 70) {
             this.ParadeMove(get_wm_name(this.weapon_mode))

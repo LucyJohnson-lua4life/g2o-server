@@ -453,6 +453,9 @@ local function init_handler() {
 
 
 
+    AI_SpawnNPC(AIExplorer.Create("BDT_10308_ADDON_RANGERBANDIT_L"), 3980.11, 848.118, 7208.67, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
+	AI_SpawnNPC(AIExplorer.Create("BDT_10308_ADDON_RANGERBANDIT_L"), 5340.93, 848.134, 7128.87, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
+	
 	local waypath = Way("NEWWORLD\\NEWWORLD.ZEN", "HAFEN", "NW_CITY_BED_HALVOR")
 	local waypoints = waypath.getWaypoints()
 
@@ -495,6 +498,10 @@ addEventHandler("onPlayerCommand", function(id, cmd, param) {
 
 	switch (cmd) {
 
+		case "pos":
+			local pos = getPlayerPosition(id)
+			print("Player position: " + pos.x + ", " + pos.y + ", " + pos.z)
+			break
 		case "goto":
 			AI_Goto(AI_GetNPCState(32), "NW_CITY_BED_HALVOR")
 			break

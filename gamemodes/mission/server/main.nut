@@ -65,6 +65,9 @@ local function init_handler() {
 
 	print("jsontest: " + age);
 	*/
+
+
+	//AI_SpawnNPC(AIHumanBanditMelee.Create("BDT_10308_ADDON_RANGERBANDIT_L"), 400, 200, -1500, 0.00, "NEWWORLD\\NEWWORLD.ZEN")
 	print(redisClient.hget("inventory:q111111", "ITPO_MANA_ADDON_04"))
 	print("empty to integer: " + "1".tointeger())
 	local res = redisClient.hgetallFlat("inventory:q11111")

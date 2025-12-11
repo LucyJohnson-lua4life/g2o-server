@@ -5,11 +5,14 @@
 
 	<script src="behaviour/base.nut" type="server" />
 	<script src="behaviour/agressive.nut" type="server" />
+	<script src="behaviour/defensive.nut" type="server" />
+	<script src="behaviour/defensiveHumanoid.nut" type="server" />
 	<script src="behaviour/monster.nut" type="server" />
 	<script src="behaviour/humanoid.nut" type="server" />
 	<script src="behaviour/orc_melee.nut" type="server" />
 
 	<script src="npc/bandit.nut" type="server" />
+	<script src="npc/explorer.nut" type="server" />
 	<script src="npc/bloodfly.nut" type="server" />
 	<script src="npc/giant-bug.nut" type="server" />
 	<script src="npc/giant-rat.nut" type="server" />
