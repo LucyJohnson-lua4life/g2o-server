@@ -172,7 +172,7 @@ function AI_Goto(npc_state, target_position_name) {
 
 	if (!("goto_is_active" in flags)) {
 		local pos = getPlayerPosition(npc_state.id)
-		local nearest_wp = getNearestWaypoint(world, 0, 0, 0)
+		local nearest_wp = getNearestWaypoint(world, pos.x, pos.y, pos.z)
 		local wp = getWaypoint(world, target_position_name)
 		local way = Way(world, nearest_wp.name, target_position_name)
 
@@ -214,3 +214,4 @@ function AI_Goto(npc_state, target_position_name) {
 
 
 }
+
