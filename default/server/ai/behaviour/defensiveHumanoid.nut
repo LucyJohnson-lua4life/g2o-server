@@ -108,6 +108,7 @@ class AIDefensiveHumanoid extends AIDefensive {
     }
 
     function OnHitReceived(kid, desc) {
+        base.OnHitReceived(kid, desc)
 		if(this.enemy_id == -1 || !isPlayerConnected(this.enemy_id)) {
 			this.enemy_id = kid
 		}

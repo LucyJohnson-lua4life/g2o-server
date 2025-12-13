@@ -35,14 +35,10 @@ class AIAgressive extends AIBase {
 	}
 
 	function Update(ts) {
-		if (isPlayerDead(this.id)) {
-			return
-		}
+		local continueUpdateRoutine = base.Update(ts)
 
-		if (("goto_is_active" in this.flags && this.flags.goto_is_active)) {
-			if (AI_Goto(this, this.flags.goto_target_name)) {
-				return
-			}
+		if(!continueUpdateRoutine) {
+			return
 		}
 
 		if (!this.ValidateEnemy() && this.collect_target) {

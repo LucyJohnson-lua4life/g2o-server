@@ -13,7 +13,7 @@ function AI_GetAngleToPlayer(from, to) {
 }
 
 function AI_TurnToPlayer(from, to) {
-	if(from == -1 || to == -1) {
+	if (from == -1 || to == -1) {
 		return
 	}
 	local from_pos = getPlayerPosition(from)
@@ -133,8 +133,9 @@ function moveByGoto(npc_state, target_waypoint) {
 		} else if (distance_moved < 2) {
 
 			local time_diff = getTickCount() - flags.last_pos_update
-			local speed = (5 * 100) * (time_diff / 1000.0); // meter per seconds!
+			local speed = (3.5 * 100) * (time_diff / 1000.0); // meter per seconds!
 			local distance = getDistance3d(flags.current_pos_x, flags.current_pos_y, flags.current_pos_z, target_waypoint.x, target_waypoint.y, target_waypoint.z)
+			//speed > distance
 			if (speed > distance) {
 				flags.current_pos_x = target_waypoint.x
 				flags.current_pos_y = target_waypoint.y
@@ -155,7 +156,7 @@ function moveByGoto(npc_state, target_waypoint) {
 				flags.current_pos_y = flags.current_pos_y + (dir_y * speed)
 				flags.current_pos_z = flags.current_pos_z + (dir_z * speed)
 
-				setPlayerPosition(npc_state.id, target_waypoint.x, target_waypoint.y, target_waypoint.z);
+				setPlayerPosition(npc_state.id, flags.current_pos_x, flags.current_pos_y, flags.current_pos_z);
 
 			}
 
@@ -184,22 +185,20 @@ function AI_Goto(npc_state, target_position_name) {
 		flags.goto_target_name <- target_position_name
 	}
 
-	//print("survived till here: " + flags.goto_route_index)
-	//print("waypoints: " + flags.goto_way.getWaypoints())
-	//print(flags.goto_way.getWaypoints()[flags.goto_route_index])
 	local current_pos = getPlayerPosition(npc_state.id)
 	local next_target = getWaypoint(world, flags.goto_way.getWaypoints()[flags.goto_route_index])
 	moveByGoto(npc_state, next_target)
 	local distance_to_target = getDistance3d(current_pos.x, current_pos.y, current_pos.z, next_target.x, next_target.y, next_target.z)
-	//print("distance: " + distance_to_target)
+
+
 	if (distance_to_target > 100) {
 		local walk_animation_name = "S_FISTWALKL"
-		//	print("survived till here2")
 		AI_TurnToVec3(npc_state.id, next_target)
 		playAni(npc_state.id, walk_animation_name)
 	} else if (flags.goto_route_index < flags.goto_way.getCountWaypoints() - 1) {
 		flags.goto_route_index = flags.goto_route_index + 1
 	} else {
+		playAni(npc_state.id, "S_RUN")
 		alignToDirection(npc_state.id, flags.goto_target_position.x, flags.goto_target_position.z)
 		// do i even need alignToDirection here or is TurnToVec3 enough?
 		//AI_TurnToVec3(npc_state.id, next_target)
@@ -209,9 +208,59 @@ function AI_Goto(npc_state, target_position_name) {
 		delete flags.goto_target_position
 		delete flags.goto_target_name
 	}
-
-
-
+	return true
 
 }
 
+function AI_Goto_Coordinate(npc_state, targetPos) {
+	local flags = npc_state.flags
+	local world = npc_state.spawn.world
+
+	if (!("goto_coordinate_is_active" in flags)) {
+		local pos = getPlayerPosition(npc_state.id)
+		local nearest_wp = getNearestWaypoint(world, pos.x, pos.y, pos.z)
+		local nearest_target_wp = getNearestWaypoint(world, targetPos.x, targetPos.y, targetPos.z)
+		local way = Way(world, nearest_wp.name, nearest_target_wp.name)
+
+
+		flags.goto_way <- way
+		flags.goto_route_index <- 0
+		flags.goto_coordinate_is_active <- true
+		flags.goto_target_position <- nearest_target_wp
+		flags.goto_target_name <- nearest_target_wp.name
+		flags.goto_coordinate_target <- targetPos
+	}
+
+	local current_pos = getPlayerPosition(npc_state.id)
+
+	local next_target = null
+
+	if (flags.goto_route_index >= flags.goto_way.getCountWaypoints() - 1) {
+		next_target = flags.goto_coordinate_target
+	} else {
+		next_target = getWaypoint(world, flags.goto_way.getWaypoints()[flags.goto_route_index])
+	}
+
+	moveByGoto(npc_state, next_target)
+	local distance_to_target = getDistance3d(current_pos.x, current_pos.y, current_pos.z, next_target.x, next_target.y, next_target.z)
+
+	if (distance_to_target > 100) {
+		local walk_animation_name = "S_FISTWALKL"
+		AI_TurnToVec3(npc_state.id, next_target)
+		playAni(npc_state.id, walk_animation_name)
+	} else if (flags.goto_route_index < flags.goto_way.getCountWaypoints()) {
+		flags.goto_route_index = flags.goto_route_index + 1
+	} else {
+		playAni(npc_state.id, "S_RUN")
+		alignToDirection(npc_state.id, flags.goto_target_position.x, flags.goto_target_position.z)
+
+		delete flags.goto_way
+		delete flags.goto_route_index
+		delete flags.goto_coordinate_is_active
+		delete flags.goto_target_position
+		delete flags.goto_target_name
+		delete flags.goto_coordinate_target
+	}
+
+	return true
+}
