@@ -9,6 +9,7 @@
 	<script src="client/classselect.nut" type="client" />
 	<script src="client/cefClientHandler.nut" type="client" />
 	<script src="client/inventoryHandler.nut" type="client" />
+	<script src="client/ingamePageHandler.nut" type="client" />
     
 
 	<script src="server/acp.nut" type="server" />

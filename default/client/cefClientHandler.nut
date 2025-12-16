@@ -1,5 +1,9 @@
-local browser = Browser(0, 0, 8192, 8192, "cef://index.html");
+local browserSingleton = Browser(0, 0, 8192, 8192, "cef://index.html");
+function GetBrowser() {
+	return browserSingleton;
+}
 
+local browser = GetBrowser();
 
 function setCharacterCreationMode() {
 	Camera.movementEnabled = false;
@@ -85,9 +89,8 @@ function testAttack(attackerId){
 //TODO: please remove
 addEventHandler("onPacket", function(packet) {
 	// read unique packet id
-	Chat.print(0, 255, 0, "Received server command!!!")
 	local packetContent = PacketReader.readPacket(packet)
-Chat.print(0, 255, 0, "allguchi")
+
 	// if the packet id doesn't match => stop code execution
 	if (packetContent.packetId != PacketId.SERVER_POST) {
 		return
@@ -95,7 +98,7 @@ Chat.print(0, 255, 0, "allguchi")
 	if (packetContent.playerId != heroId) {
 		return
 	}
-Chat.print(0, 255, 0, "gotin here")
+
 
 	// read message
 	local post = packetContent.post
